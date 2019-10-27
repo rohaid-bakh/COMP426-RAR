@@ -1,0 +1,24 @@
+{
+  "name": "comp426-rar",
+  "version": "1.0.0",
+  "description": "Final Project",
+  "main": "index.js",
+  "dependencies": {
+    "browser-sync": "^2.26.7",
+    "bulma": "^0.8.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/afanfic/COMP426-RAR.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/afanfic/COMP426-RAR/issues"
+  },
+  "homepage": "https://github.com/afanfic/COMP426-RAR#readme"
+}
