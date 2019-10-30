@@ -1,0 +1,36 @@
+.header {
+    text-align: center;
+    font-size: 50px;
+    color: white;
+    background: pink;
+
+}
+
+.centerthatshit {
+    text-align: center;
+    font-size: 20px;
+}
+
+div {
+    column-count: 1;
+    align-content: center;
+}
+
+.button {
+    background: black;
+}
+
+.textarea {
+    width: 1px;
+}
+
+body {
+    background:white;
+}
+
+.padding {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
