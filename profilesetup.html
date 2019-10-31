@@ -13,27 +13,61 @@
 
 <body>
         <section class="centerthatshit">
-                        <div>
-                                Your name here: <input class="padding" placeholder="Your name"></input>
+                        <div class="field">
+                                <label class="label">Your Name here:</label>
+                                <div class="control">
+                                        <input class="input" type="text" placeholder="Your name">
+                                </div>
+                                <label class="label">Preferred Screen Name here:</label>
+                                <div class="control">
+                                        <input class="input" type="text" placeholder="Preferred screen name">
+                                </div>
                         </div>
                         <div>
-                                Preferred screen name: <input class="padding" placeholder="Your name"></input>
+                                <label class="label">Display Name?</label>
+                                <div class="field">
+                                        <div class="control">
+                                                <label class="radio">
+                                                    <input type="radio" name="question">
+                                                    Yes
+                                                </label>
+                                                <label class="radio">
+                                                    <input type="radio" name="question">
+                                                    No
+                                                </label>
+                                        </div>
+                                </div>
                         </div>
-                        <div>Display Name?<input type="radio" name="" value="">Yes</input</div><input type="radio" name="" value="">No</input></div>
-                        <div>
-                                Password: <input class="padding" placeholder=""></input>
+
+                        <div class="field">
+                                <label class="label">Password</label>
+                                <div class="control">
+                                        <input class="input" type="text" placeholder="Enter a strong password.">
+                                </div>
+
+                                <label class="label">Pronouns</label>
+                                <div class="control">
+                                        <input class="input" type="text" placeholder="He/Him/His, She/Her/Hers, They/Them/Theirs, etc.">
+                                </div>
+
+                                <label class="label">Gender Identity:</label>
+                                <div class="control">
+                                        <input class="input" type="text" placeholder="">
+                                </div>
                         </div>
+                        <div class="field">
+                                <label class="label">Your age</label>
+                                        <div class="control">
+                                          <div class="select">
+                                            <select>
+                                              <option>Select dropdown</option>
+                                              <option>18</option>
+                                            </select>
+                                          </div>
+                                        </div>
+                                      </div>
                         <div>
-                                Pronouns: <input class="padding" placeholder="He/Him/His, She/Her/Hers, They/Them/Theirs, etc."></input>
-                        </div>
-                        <div>
-                                Gender Identity <input class="padding" placeholder=""></input>
-                        </div>
-                        <div>
-                                Your age here: <input class="padding" placeholder="Your age"></input>
-                        </div>
-                        <div>
-                                <label>Describe yourself in 500 words or less:</label>
+                                <label>Describe yourself in 500 characters or less:</label>
                         </div>
                         <div>
                                 <textarea class="textarea" class="padding" placeholder="Put whatever you feel necessary here."></textarea>
@@ -49,9 +83,14 @@
                                 Enter your interests as a comma-separated list.
                                 <textarea class="textarea" class="padding" placeholder="Hiking, fencing, swimming..."></textarea>
                         </div>
-                        <div>
-                                Sync Contacts?<input type="radio" name="" value="">Yes</input><input type="radio" name="" value="">No</input>
-                        </div>
+                        <div class="field">
+                                        <div class="control">
+                                          <label class="checkbox">
+                                            <input type="checkbox">
+                                            I agree to the <a href="#">terms and conditions</a>
+                                          </label>
+                                        </div>
+                                      </div>
                 <input class="button" type="submit" value="Submit info">
         </section>
 </body>
