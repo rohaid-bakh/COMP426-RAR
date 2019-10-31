@@ -9,12 +9,13 @@
 .centerthatshit {
     text-align: center;
     font-size: 20px;
+    width: 100%
 }
 
 div {
-    column-count: 1;
+    /* column-count: 1; */
     align-content: center;
-    width: 100%;
+    /* width: 100%; */
 }
 
 .button {
@@ -39,4 +40,8 @@ body {
 
 .radio {
     align-content: center;
+}
+
+label {
+    padding-top: 20px
 }
