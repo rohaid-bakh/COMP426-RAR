@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+        <head>
+                <header class="header">Profile setup</header>
+                
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <title>Profile Setup</title>
+                <link rel="stylesheet" href="profilesetup.css" />
+                <link rel="stylesheet" href="node_modules/bulma/css/bulma.css" />
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css"/>
+        </head>
+        
+
+<body class="centerthatshit">
+        <column class="column is-half is-offset-one-quarter">
+        <section class="centerthatshit">
+                        <div class="field">
+                                <label class="label">Your Name here:</label>
+                                <div class="control">
+                                        <input class="input" type="text" placeholder="Your name">
+                                </div>
+                                <label class="label">Preferred Screen Name here:</label>
+                                <div class="control">
+                                        <input class="input" type="text" placeholder="Preferred screen name">
+                                </div>
+                        </div>
+                        <div class="is-aligned-center">
+                                <label class="label">Display Name?</label>
+                                <div class="field centerthatshit">
+                                        <div class="control centerthatshit">
+                                                <label class="radio">
+                                                    <input type="radio" name="question">
+                                                    Yes
+                                                </label>
+                                                <label class="radio">
+                                                    <input type="radio" name="question">
+                                                    No
+                                                </label>
+                                        </div>
+                                </div>
+                        </div>
+
+                        <div class="field">
+                                <label class="label">Password</label>
+                                <div class="control">
+                                        <input class="input" type="text" placeholder="Enter a strong password.">
+                                </div>
+
+                                <label class="label">Pronouns</label>
+                                <div class="control">
+                                        <input class="input" type="text" placeholder="He/Him/His, She/Her/Hers, They/Them/Theirs, etc.">
+                                </div>
+
+                                <label class="label">Gender Identity:</label>
+                                <div class="control">
+                                        <input class="input" type="text" placeholder="">
+                                </div>
+                        </div>
+                        <div class="field centerthatshit">
+                                <label class="label centerthatshit">Your age</label>
+                                        <div class="control centerThis">
+                                          <div class="select">
+                                            <select>
+                                              <option>Select dropdown</option>
+                                              <option>18</option>
+                                              <option>19</option>
+                                              <option>20</option>
+                                              <option>21</option>
+                                              <option>22</option>
+                                              <option>23</option>
+                                              <option>24</option>
+                                              <option>25</option>
+                                              <option>26</option>
+                                              <option>27</option>
+                                              <option>28</option>
+                                              <option>29</option>
+                                              <option>30</option>
+                                              <option>31</option>
+                                              <option>32</option>
+                                              <option>33</option>
+                                              <option>34</option>
+                                              <option>35</option>
+                                              <option>36</option>
+                                              <option>37</option>
+                                              <option>38</option>
+                                              <option>39</option>
+                                              <option>40</option>
+                                            </select>
+                                          </div>
+                                        </div>
+                                      </div>
+                        <div>
+                                <label class="label">Describe yourself in 500 characters or less:</label>
+                        </div>
+                        <div>
+                                <textarea class="textarea" class="padding" placeholder="Put whatever you feel necessary here."></textarea>
+                        </div>
+                        <div>
+                                <label class="label">Upload your profile picture:</label>
+                                <form action="upload.php" method="post" enctype="multipart/form-data">
+                                        Select image to upload:
+                                        <input type="file" name="fileToUpload" id="fileToUpload">
+                                </form>
+                        </div>
+                        </div>
+                                <label class="label">Enter your interests as a comma-separated list.</label>
+                                <textarea class="textarea" class="padding" placeholder="Hiking, fencing, swimming..."></textarea>
+                        </div>
+                        <div class="field">
+                                        <div class="control centerThat">
+                                          <label class="checkbox">
+                                            <input type="checkbox">
+                                            I agree to the <a href="#">terms and conditions</a>
+                                          </label>
+                                        </div>
+                        </div>
+
+                <input class="button" type="submit" value="Submit">
+                <input class="button" type="submit" value="Cancel">
+        </column>
+        </section>
+</body>
+
+</html>
