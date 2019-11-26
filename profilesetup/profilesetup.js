@@ -13,3 +13,7 @@
 //   $("#imgInp").change(function() {
 //     readURL(this);
 //   });
+
+
+localStorage.setItem("username", "John");
+alert("username = " + localStorage.getItem("username"));

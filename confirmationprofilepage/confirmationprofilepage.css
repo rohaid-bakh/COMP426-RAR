@@ -1,0 +1,11 @@
+header {
+    text-align: center;
+    font-size: 50px;
+    color: white;
+    background: pink;
+    align-content: center;
+}
+
+body {
+    background:rgb(172, 233, 241);
+}

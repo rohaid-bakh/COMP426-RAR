@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+        <head>
+                <header class="header">Confirmation - is this information correct?</header>
+                
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <title>Profile Setup</title>
+                <link rel="stylesheet" href="confirmationprofilepage.css" />
+                <link rel="stylesheet" href="node_modules/bulma/css/bulma.css" />
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css"/>
+        </head>
+        
+
+<body class="centerthatshit" onload="if(localStorage.userEdits){document.getElementById('name').value=localStorage.userEdits}" id="myForm">
+        <column class="column is-half is-offset-one-quarter">
+        <section class="centerthatshit">
+                        <div class="field">
+                                <label class="label">Name: </label>
+                                
+                                <label class="label">The name other people will see: </label>
+                        </div>
+
+                        <div class="field">
+                                <label class="label">Password: ********</label>
+
+                                <label class="label">Pronouns: </label>
+
+                                <label class="label">Gender Identity: </label>
+                        </div>
+                        <div class="field centerthatshit">
+                                <label class="label centerthatshit">Your age: </label>
+                                        <div class="control centerThis">
+                                        </div>
+                                      </div>
+                        <div class="field">
+                                <label class="label">Your bio: </label>
+                        </div>
+                        <div class="field">
+                                <label class="label">Profile picture: </label>
+                        </div>
+                        </div class="field">
+                                <label class="label">Your interests: </label>
+                        </div>
+
+                        <a href = "../dashboard/dash.html" class="button  is-success is-inverted" type="submit" value="Sign up">Submit</a>
+                        <a href = "../profilesetup/profilesetup.html" class="button  is-success is-inverted" type="submit" value="Sign up">Cancel</a>
+        </column>
+        </section>
+</body>
+
+</html>
