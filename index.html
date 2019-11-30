@@ -4,10 +4,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Love Conquers All!</title>
+    <title>Prism</title>
+    <script src="./node_modules/jquery/dist/jquery.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="node_modules/bulma/css/bulma.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <script src="./loginpage/logincomponent.js"></script>
+   
 </head>
 
 <body>
@@ -52,13 +56,13 @@
                         <label class=label>
                             Username
                         </label>
-                        <input class="input" type="username" placeholder="Username">
+                        <input class="input" type="username" placeholder="Username" id="un">
                     </div>
                     <label class=label>
                         Password
                     </label>
                     <div class="field control">
-                        <input class="input" type="password" placeholder="Password">
+                        <input class="input" type="password" placeholder="Password" id="pw">
                     </div>
                     <div class="field  has-text-centered">
                         <div>
