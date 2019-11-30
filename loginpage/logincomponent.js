@@ -2,7 +2,6 @@
 const pubRoot = new axios.create({
   baseURL: "http://localhost:3000/public"
 });
-
 // {
 //     "name": "chris",
 //     "pass": "pass123",
@@ -15,75 +14,25 @@ const pubRoot = new axios.create({
 $(function() {
     $("input.button.is-success.is-inverted").on("click" , event, function(){
         event.preventDefault();
-        handleLogin(event);
+       checkLogin();
     });
-    function handleLogin(event){
-        console.log(event);
-        alert("event");
-        console.log(document.getElementById("un").value);
-        console.log(document.getElementById("pw").value);
-        console.log(checkLogin());
-       
-    }
+   
     async function checkLogin() {
-        return await pubRoot.post(`/login`, {
-          name: document.getElementById("un").value,
-          pass: document.getElementById("pw").value,
-          data: {},
-        })
+        let r = pubRoot.post('http://localhost:3000/account/login',
+        {
+            name: document.getElementById("un").value,
+            pass: document.getElementById("pw").value,
+         });
+        r.then(response => {
+            // To add:buffer icon 
+            //redirect to dashboard
+         console.log(response.data);
+         //removes wrong message
+         $("h1#wrong").remove();
+        }).catch(error => {
+        console.log(error);
+        $("div#pwbox").append("<h1 class='title' id='wrong'>Wrong Password/Username </h1>");
+        });
+        console.log(r);
       }
-
-    // $('#test').click(test);
-    // function test(event){
-    //   event.preventDefault();
-    //   console.log('hi');
-    //   const pubRoot = new axios.create({
-    //     baseURL: "http://localhost:3000/public"
-    //   });
-      
-    //   async function createAuthor({first = 'John', last = 'Doe', numBooks = 0}) {
-    //     return await pubRoot.post(`/authors/`, {
-    //       data: {first, last, numBooks}
-    //     })
-    //   }
-      
-    //   async function getAllAuthors() {
-    //     return await pubRoot.get('/authors');
-    //   }
-      
-    //   (async () => {
-    //     await createAuthor({
-    //       first: "chris",
-    //       numBooks: 4
-    //     });
-      
-    //     let {data} = await getAllAuthors();
-    //     console.log(data)
-    //   })();
-        
-    // }
-  });
-
-// async function createAuthor({first = 'John', last = 'Doe', numBooks = 0}) {
-//   return await pubRoot.post(`/authors/`, {
-//     data: {first, last, numBooks}
-//   })
-// }
-
-// async function getAllAuthors() {
-//   return await pubRoot.get('/authors');
-// }
-
-// (async () => {
-//   await createAuthor({
-//     first: "chris",
-//     numBooks: 4
-//   });
-
-//   let {data} = await getAllAuthors();
-//   console.log(data)
-// })();
-
-// async function handleLogin(){
-//     $("input.button.is-success.is-inverted").on("click",)
-// }
+    });

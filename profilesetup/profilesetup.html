@@ -7,6 +7,9 @@
                 <meta charset="utf-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1">
                 <title>Profile Setup</title>
+                <script src="../node_modules/jquery/dist/jquery.js"></script>
+                <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+                <script src="./profilesetup.js"></script>
                 <link rel="stylesheet" href="profilesetup.css" />
                 <link rel="stylesheet" href="node_modules/bulma/css/bulma.css" />
                 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css"/>
@@ -19,11 +22,11 @@
                         <div class="field">
                                 <label class="label">Your Name here:</label>
                                 <div class="control">
-                                        <input class="input" type="text" placeholder="Your name">
+                                        <input class="input" type="text" placeholder="Your name" id="yn">
                                 </div>
                                 <label class="label">Preferred Screen Name here:</label>
                                 <div class="control">
-                                        <input class="input" type="text" placeholder="Preferred screen name">
+                                        <input class="input" type="text" placeholder="Preferred screen name" id="un">
                                 </div>
                         </div>
                         <div class="is-aligned-center">
@@ -45,7 +48,7 @@
                         <div class="field">
                                 <label class="label">Password</label>
                                 <div class="control">
-                                        <input class="input" type="password" placeholder="Enter a strong password." minlength="8" maxlength ="100" required>
+                                        <input class="input" type="password" placeholder="Enter a strong password." minlength="8" maxlength ="15" required id="pw">
                                 </div>
 
                                 <label class="label">Pronouns</label>
@@ -118,7 +121,7 @@
                         </div>
 
                 <!-- <input class="button" type="submit" value="Submit"> -->
-                <a href = "../confirmationprofilepage/confirmationprofilepage.html" class="button  is-success is-inverted" type="submit" value="Sign up">Submit</a>
+                <a href = "../confirmationprofilepage/confirmationprofilepage.html" class="button  is-success is-inverted" type="submit" value="Sign up" id="su">Submit</a>
                 <a href = "../index.html" class="button  is-success is-inverted" type="submit" value="Sign up">Cancel</a>
         </column>
         </section>

@@ -71,14 +71,14 @@ label {
     align-content: center;
 }
 
-field {
+/* field {
     align-content: center;
 }
 
 radio {
     width: 50%;
     align-content: center;
-}
+} */
 
 .column {
     column-count: 1;
