@@ -1,15 +1,7 @@
-// import axios from '../node_modules/axios/dist/axios.js';
+//TO DO: Handle code that redirects to dashboard
 const pubRoot = new axios.create({
   baseURL: "http://localhost:3000/public"
 });
-// {
-//     "name": "chris",
-//     "pass": "pass123",
-//     "data": {
-//       "role": 2,
-//       "description": "Lazy..."
-//     }
-//   }
 
 $(function() {
     $("input.button.is-success.is-inverted").on("click" , event, function(){
@@ -24,10 +16,8 @@ $(function() {
             pass: document.getElementById("pw").value,
          });
         r.then(response => {
-            // To add:buffer icon 
-            //redirect to dashboard
+          //TO DO : Redirect to dashboard
          console.log(response.data);
-         //removes wrong message
          $("h1#wrong").remove();
         }).catch(error => {
         console.log(error);
@@ -36,3 +26,14 @@ $(function() {
         console.log(r);
       }
     });
+
+    // COMMENTED CODE PLEASE IGNORE
+    // import axios from '../node_modules/axios/dist/axios.js';
+// {
+//     "name": "chris",
+//     "pass": "pass123",
+//     "data": {
+//       "role": 2,
+//       "description": "Lazy..."
+//     }
+//   }
