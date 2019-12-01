@@ -1,33 +1,48 @@
-/* .column {
-    float: left;
-    width: 33.33%;
-}
-
-.row:after {
-    content: "";
-    display: table;
-    clear: both;
-} */
-
 .column {
     float: left;
     padding: 10px;
+    padding-top: 100px;
   }
-  
-.column-left {
-    width: 25%;
-}
-
-.column-right {
-    width: 25%;
-}
-  
-.column-middle {
-    width: 50%;
-}
 
 .row:after {
     content: "";
     display: table;
     clear: both;
+}
+
+.control is-expanded {
+    width: 1000px;
+}
+
+.input {
+    width: 1000px;
+}
+
+.field is-grouped {
+    width: 1000px;
+}
+
+.CENTER {
+    width: 1000%;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+ul#menu li {
+    display:inline;
+  }
+
+#menu {
+    display:inline;
+}
+
+.rightit {
+    display: right;
+    justify-content: right;
+    align-content: right;
+}
+
+.input {
+    width: 500%;
 }
