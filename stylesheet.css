@@ -2,7 +2,7 @@
         position: absolute;
         right: 0px;
         width: 300px;
-        border: 3px solid #73AD21;
+        border: 3px solid #F98866;
         padding: 10px;
 }
 
@@ -13,4 +13,24 @@
 section {
         width: 100%;
         background-color: black;
+}
+
+input {
+        padding-left: 10px;
+        padding-right: 10px;
+}
+
+.input {
+        padding-left: 10px;
+        padding-right: 10px;
+}
+
+.padding {
+        padding-left: 10px;
+        padding-right: 10px;
+}
+
+#un {
+        padding-left: 10px;
+        padding-right: 10px;
 }
