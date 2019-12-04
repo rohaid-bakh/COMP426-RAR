@@ -21,7 +21,7 @@ $(function() {
          $("h1#wrong").remove();
         }).catch(error => {
         console.log(error);
-        $("div#pwbox").append("<h1 class='title' id='wrong'>Wrong Password/Username </h1>");
+        $("div#pwbox").append("<br><h1 class='title' id='wrong' style='font-family: arial; font-size: 15px; align-items: center; text-align: center;'>Wrong Password/Username </h1>");
         });
         console.log(r);
       }

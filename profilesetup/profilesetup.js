@@ -13,7 +13,7 @@ const pubRoot = new axios.create({
   $(function() {
     $("a#su.button.is-success.is-inverted").on("click" , event, function(){
         event.preventDefault();
-        alert("hello");
+        // alert("hello");
         signup(event);
     });
 
