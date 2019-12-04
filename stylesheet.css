@@ -14,23 +14,3 @@ section {
         width: 100%;
         background-color: black;
 }
-
-input {
-        padding-left: 10px;
-        padding-right: 10px;
-}
-
-.input {
-        padding-left: 10px;
-        padding-right: 10px;
-}
-
-.padding {
-        padding-left: 10px;
-        padding-right: 10px;
-}
-
-#un {
-        padding-left: 10px;
-        padding-right: 10px;
-}
