@@ -42,9 +42,9 @@ async function createPost() {
 
     let r = pubRoot.post('http://localhost:3000/private/create',
         {
-            headers: { Authorization: z},
+            headers: { Authorization: z },
             username: _username,
-            content: "fdsjafdjasjfldasjlfdasjlfdasjlfdasjkldasfkjlfdaskjfd",
+            content: "fdsjafdjasjfldasjlfdasjlfdasjlfdasjkldasfkjlfdaskjfd"
         });
     r.then(response => {
         console.log(response);
