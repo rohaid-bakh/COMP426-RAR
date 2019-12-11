@@ -22,8 +22,10 @@ $(function () {
 function giphy(){
     console.log("1");
     let current =  document.getElementById("userNewPost").value;
-    var xhr = $.get("http://api.giphy.com/v1/gifs/search?&api_key=BP3o4MRx8RqyjPaYrQdkgucOFL641y3M&limit=10"+
-    "&q=" + current + "&offset=0&rating=G&lang=en");
+    console.log(current);
+    let key = "BP3o4MRx8RqyjPaYrQdkgucOFL641y3M";
+    let current2 = current.replace(/ /g, "+");
+    var xhr =  $.get("http://api.giphy.com/v1/gifs/search?q="+ current2 +"&api_key=BP3o4MRx8RqyjPaYrQdkgucOFL641y3M&limit=5");
     xhr.done(function(data) { console.log("success got data", data); });
 }
 
