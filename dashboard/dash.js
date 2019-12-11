@@ -10,10 +10,12 @@ const pubRoot = new axios.create({
 
     
     function getToken() {
-        return document.cookie + "";
+        return document.cookie;
     }
+    
     async function getRecentPosts() {
-        let z = 'Bearer '+ getToken().substring(4);
+        let z = 'Bearer '+ getToken();
+        console.log(z);
     
         let r = pubRoot.get('http://localhost:3000/account/status',
         {
