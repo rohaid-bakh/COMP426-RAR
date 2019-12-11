@@ -37,18 +37,39 @@ async function getRecentPosts() {
 };
 
 async function createPost() {
-    console.log("z = " + z);
-    console.log("username= " + _username);
-
-    let r = axios.post('http://localhost:3000/private/create',
+    let content = "sdadasdasdsasfdfdsfdasdfsdasdsadsa";
+    let postId = getRandomInt();
+    let r = axios.post('http://localhost:3000/private/posts',
         {
-            headers: { Authorization: z },
-            data: {username: _username,
-            content: "fdsjafdjasjfldasjlfdasjlfdasjlfdasjkldasfkjlfdaskjfd"}
-        });
+            data: {[postId]: {
+                "id": postId,
+                "username": _username,
+                "content": content,
+                "replies": [],
+                "hearts": [],
+                "timestamp": new Date()
+              } 
+            }
+        }, {
+            headers: {Authorization: z},
+        }
+        );
     r.then(response => {
         console.log(response);
+        return response;
     }).catch(error => {
         console.log(error);
     });
 }
+
+async function getPosts() {
+    let r = axios.get('http://localhost:3000/private/posts', {headers: {Authorization: z}}).then(response => {
+        console.log(response);
+        return response;
+    }).catch(error => {console.log(error)});
+}
+
+
+let getRandomInt = function () {
+    return Math.floor(Math.random() * Math.floor(Number.MAX_SAFE_INTEGER));
+  };
