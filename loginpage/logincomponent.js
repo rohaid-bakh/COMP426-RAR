@@ -1,4 +1,3 @@
-//TO DO: Handle code that redirects to dashboard
 const pubRoot = new axios.create({
   baseURL: "http://localhost:3000/public"
 });
@@ -16,24 +15,15 @@ $(function() {
             pass: document.getElementById("pw").value,
          });
         r.then(response => {
-          //TO DO : Redirect to dashboard
+        document.cookie =　response.data.jwt +"; path=./dashboard/dash.html";
          console.log(response.data);
          $("h1#wrong").remove();
+         window.location.href = './dashboard/dash.html'; 
         }).catch(error => {
         console.log(error);
-        $("div#pwbox").append("<br><h1 class='title' id='wrong' style='font-family: arial; font-size: 15px; align-items: center; text-align: center;'>Wrong Password/Username </h1>");
+        $('p#wrong').html("<h1 class='title' id='wrong' style='font-family: arial; font-size: 15px; align-items: center; text-align: center;'>Wrong Password/Username </h1>");
         });
         console.log(r);
       }
     });
 
-    // COMMENTED CODE PLEASE IGNORE
-    // import axios from '../node_modules/axios/dist/axios.js';
-// {
-//     "name": "chris",
-//     "pass": "pass123",
-//     "data": {
-//       "role": 2,
-//       "description": "Lazy..."
-//     }
-//   }

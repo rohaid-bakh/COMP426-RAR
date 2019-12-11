@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="node_modules/bulma/css/bulma.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
-    <script src="./loginpage/logincomponent.js"></script>
+    <script src="./loginpage/logincomponent.js" type="module"></script>
 </head>
 
 <body style="background-color: black;">
@@ -70,8 +70,9 @@
                     <div class="field control" id="pwbox">
                         <div class="padding" style="padding-left: 25px; padding-right: 25px;">
                             <input class="input" type="password" placeholder="Password" id="pw">
-                        </div>
+                        </div>     
                     </div>
+                    <p id='wrong'></p>
                     <div class="field  has-text-centered">
                         <div>
                             <input class="button  is-success is-inverted" type="submit" value="Log In">
