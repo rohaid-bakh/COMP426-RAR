@@ -33,6 +33,7 @@ async function getRecentPosts() {
     }).catch(error => {
         console.log(error);
     });
+    return ;
 };
 
 async function createPost() {
