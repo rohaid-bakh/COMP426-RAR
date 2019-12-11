@@ -1,4 +1,5 @@
 let _username;
+let z;
 
 const pubRoot = new axios.create({
     baseURL: "http://localhost:3000/public"
@@ -18,8 +19,8 @@ function getToken() {
 }
 
 async function getRecentPosts() {
-    let z = 'Bearer ' + getToken();
-    // console.log(z);
+    z = 'Bearer ' + getToken();
+    console.log("Working " + z);
 
     let r = pubRoot.get('http://localhost:3000/account/status',
         {
@@ -28,7 +29,7 @@ async function getRecentPosts() {
     r.then(response => {
         console.log(response.data.user);
         _username = response.data.user.name;
-        console.log(_username);
+        console.log("Working " + _username);
         return;
     }).catch(error => {
         console.log(error);
@@ -36,15 +37,14 @@ async function getRecentPosts() {
 };
 
 async function createPost() {
-    let z = 'Bearer ' + getToken();
     console.log("z = " + z);
     console.log("username= " + _username);
 
-    let r = pubRoot.post('http://localhost:3000/private/create',
+    let r = axios.post('http://localhost:3000/private/create',
         {
             headers: { Authorization: z },
-            username: _username,
-            content: "fdsjafdjasjfldasjlfdasjlfdasjlfdasjkldasfkjlfdaskjfd"
+            data: {username: _username,
+            content: "fdsjafdjasjfldasjlfdasjlfdasjlfdasjkldasfkjlfdaskjfd"}
         });
     r.then(response => {
         console.log(response);
