@@ -106,11 +106,23 @@ function getInterests() {
      });
     r.then(response => {
      console.log(response.data);
+     document.cookie =　response.data.jwt +"; path=./dashboard/dash.html";
      //code to redirect to dashboard
     }).catch(error => {
     console.log(error);
     alert("That Username is Already in Use, Pick a New One")
     });
+
+    let z = pubRoot.post('http://localhost:3000/account/login',
+        {
+        name: document.getElementById("un").value,
+        pass: document.getElementById("pw").value, 
+         });
+        z.then(response => {
+         window.location.href = './dashboard/dash.html'; 
+        }).catch(error => {
+        console.log(error);
+        });
     
   }
 

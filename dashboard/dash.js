@@ -22,7 +22,7 @@ const pubRoot = new axios.create({
             headers: {Authorization: z},
          });
          r.then(response => {
-             console.log(response.data);
+             console.log(response.data.user);
             }).catch(error => {
             console.log(error);
             });
