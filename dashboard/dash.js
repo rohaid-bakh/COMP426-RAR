@@ -87,13 +87,17 @@ async function getRecentPosts() {
     });
 };
 
-async function createPost() {
-    let content = "sdadasdasdsasfdfdsfdasdfsdasdsadsa";
-    let postId = getRandomInt();
-    let r = axios.post('http://localhost:3000/private/posts',
-        {
-            data: {
-                [postId]: {
+async function createPost(event) {
+    event.preventDefault();
+
+    let content = $("#userNewPost")[0].value;
+    console.log(content);
+    if (content != "") {
+        let postId = getRandomInt();
+        console.log("CreatingA2");
+        let r = pubRoot.post(`http://localhost:3000/private/posts/${postId}`,
+            {
+                data: {
                     "id": postId,
                     "username": _username,
                     "content": content,
@@ -101,26 +105,72 @@ async function createPost() {
                     "hearts": [],
                     "timestamp": new Date()
                 }
-            }
-        }, {
-        headers: { Authorization: z },
+            }, {
+            headers: { Authorization: z },
+        }
+        );
+        r.then(response => {
+            console.log(response);
+            return response;
+        }).catch(error => {
+            console.log(error);
+        });
+    } else {
+        alert("Content can't be blank.")
     }
-    );
-    r.then(response => {
-        console.log(response);
-        return response;
-    }).catch(error => {
-        console.log(error);
-    });
-}
+};
 
 async function getPosts() {
-    let r = axios.get('http://localhost:3000/private/posts', { headers: { Authorization: z } }).then(response => {
+    let r = pubRoot.get('http://localhost:3000/private/posts', { headers: { Authorization: z } }).then(response => {
+        // console.log(response);
+        return response;
+    }).catch(error => { console.log(error) });
+};
+
+async function likePost(postId) {
+    let r = pubRoot.post(`http://localhost:3000/private/posts/${postId}/hearts`,
+        { data: [_username], type: "merge" }, { headers: { Authorization: z } }).then(response => {
+            console.log(response);
+            return response;
+        }).catch(error => { console.log(error) });
+};
+
+async function unlikePost(postId) {
+    let temp;
+    let r = pubRoot.get(`http://localhost:3000/private/posts/${postId}/hearts`,
+        { headers: { Authorization: z } }).then(response => {
+            console.log(response);
+            temp = response.data.result;
+            console.log(temp);
+            temp = temp.filter(x => {x != _username})
+            console.log(temp)
+            let m = pubRoot.post(`http://localhost:3000/private/posts/${postId}/hearts`,
+                {data: temp},
+                { headers: { Authorization: z }}
+            ).then(response => { return response }).catch(error => { console.log(error) });
+        }).catch(error => { console.log(error) });
+}
+
+async function deletePost(postId) {
+    let r = pubRoot.delete(`http://localhost:3000/private/posts/${postId}`, {headers: {Authorization: z}}).then(
+        response => {
+            console.log(response);
+            return response;
+        }
+    ).catch(error => {console.log(error)});
+}
+
+async function editPost(postId, content) {
+
+}
+
+async function replyPost(postId, content) {
+    let r = pubRoot.post(`http://localhost:3000/private/posts/${postId}/replies`,
+    { data: [content], type: "merge" }, { headers: { Authorization: z } }).then(response => {
         console.log(response);
         return response;
     }).catch(error => { console.log(error) });
 }
-
 
 let getRandomInt = function () {
     return Math.floor(Math.random() * Math.floor(Number.MAX_SAFE_INTEGER));
