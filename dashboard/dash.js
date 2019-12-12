@@ -409,6 +409,8 @@ function submitCreateEvent() {
 }
 
 function renderEditProfileModal() {
+    console.log("Editing profile");
+    console.log(_userInfo);
     let s = `<div class="modal is-active editProfileModal" id = "profileModal">
     <div class="modal-background"></div>
     <div class="modal-card">
@@ -478,7 +480,7 @@ function submitProfileChanges() {
         }, {
         headers: { Authorization: z },
     }).then(response => { console.log(response); 
-        _userInfo = response.data.result.posted;
+        _userInfo = {data: response.data.result.posted};
         console.log("After updating profile _userInfo should be: ");
         console.log(_userInfo);
         console.log("profile updated"); cancelProfileChanges();}).catch(error => { console.log(error) });
@@ -530,7 +532,7 @@ async function createUser() {
                 "yourname": _userInfo.data.yourname,
                 "pronouns": _userInfo.data.pronouns,
                 "age": _userInfo.data.age,
-                "descriptions": _userInfo.data.descriptions,
+                "description": _userInfo.data.description,
                 "genderIdentity": _userInfo.data.genderIdentity,
                 "interest": _userInfo.data.interest,
             }
