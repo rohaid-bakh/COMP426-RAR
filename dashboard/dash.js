@@ -1,6 +1,6 @@
 let _username;
 let z;
-
+let clickedgif;
 
 const pubRoot = new axios.create({
     baseURL: "http://localhost:3000/public"
@@ -19,7 +19,26 @@ $(function () {
     $(document).on("keydown", "textarea#text", function (event) {
         setTimeout(giphy(), 4000);
     });
+    $(document).on("click","td", function(event){
+        addgif(event);
+    })
 });
+
+ function addgif(event){
+     let id  = event.currentTarget.id;
+     let url = $( "#"+ id).children().attr( 'src');
+     clickedgif = url;
+     $("#examplegif").empty();
+     $("#examplegif").append(`
+     <h4 class="subtitle">Image you've selected </h4>
+     <figure class="image is-128x128">
+     <img src="`+ url +`">
+   </figure>`);
+     
+
+     console.log(id);
+     console.log($( "#"+ id).children().attr( 'src'));
+ }
 
 // USE FOR TESTING PURPOSES ONLY!!! BE VERY CAREFUL!!!
 async function deleteAllPosts() {
@@ -34,14 +53,6 @@ async function deleteAllPosts() {
 function searchbox() {
     $("#giphPostButton").replaceWith("<textarea class='editTweet' rows='4' cols='40' id='text'>" + " " +
         "</textarea>");
-    $("#text").after(`
-    <table class="table is-bordered" id='giftable'>
-    <tbody id='gifInner'>
-    <tr></tr>
-    <tr></tr>
-    </tbody>
-    </table>
-    `)
     $("#submitBox").after(` <div id="box">
     <table class="table is-bordered">
     <tr id="inner" style="width:500px, height:600px" >
@@ -52,6 +63,7 @@ function searchbox() {
     </tr>
     </table>
     </div>`)
+    $("#userNewPost").after(`<div id="examplegif"></div>`);
 
 }
 
@@ -66,11 +78,11 @@ function giphy() {
         var xhr = $.get("http://api.giphy.com/v1/gifs/search?q=" + current2 + "&api_key=BP3o4MRx8RqyjPaYrQdkgucOFL641y3M&limit=5");
         xhr.done(function (data) {
             console.log(data.data[0]);
-            $("#inner").empty()
+            $("#inner").empty();
             for (let i = 0 ; i < 8 ; i++){
                 let ar = data.data[i];
                 let z = ar.images["480w_still"];
-                $("#inner").append(`<td><img src="`+ z.url +`" height="200" width="200" id="imag"></img></td>
+                $("#inner").append(`<td id="`+ i +`"><img src="`+ z.url +`" height="200" width="200"></img></td>
                 `);
             }
             
