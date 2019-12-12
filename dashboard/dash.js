@@ -11,7 +11,7 @@ $(function () {
     // alert("hello world?");
     // console.log(document.cookie);
     getRecentPosts();
-    $(document).on("click", '#submitPostButton', createPost());
+    $("#submitPostButton").on("click", function(event) { createPost(event)});
     $(document).on("click", "#giphPostButton", function (event) {
         console.log("hello");
         searchbox()
@@ -19,8 +19,18 @@ $(function () {
     $(document).on("keydown", "textarea#text", function (event) {
         setTimeout(giphy(), 4000);
     });
-    editPost("3131663123872237", "Post 438324083420038240932432");
 });
+
+// USE FOR TESTING PURPOSES ONLY!!! BE VERY CAREFUL!!!
+async function deleteAllPosts() {
+    let r = pubRoot.delete(`http://localhost:3000/private`, {headers: {Authorization: z}}).then(
+        response => {
+            console.log(response);
+            return response;
+        }
+    ).catch(error => {console.log(error)});
+}
+
 function searchbox() {
     $("#giphPostButton").replaceWith("<textarea class='editTweet' rows='4' cols='40' id='text'>" + " " +
         "</textarea>");
@@ -91,6 +101,7 @@ async function createPost(event) {
     // event.preventDefault();
 
     let content = $("#userNewPost")[0].value;
+    console.log("Running");
     console.log(content);
     if (content != "") {
         let postId = getRandomInt();
@@ -111,6 +122,7 @@ async function createPost(event) {
         );
         r.then(response => {
             console.log(response);
+            $("#userNewPost")[0].value = "";
             return response;
         }).catch(error => {
             console.log(error);
