@@ -86,10 +86,12 @@ function giphy() {
         xhr.done(function (data) {
             console.log(data.data[0]);
             $("#inner").empty();
-            for (let i = 0 ; i < 8 ; i++){
+            for (let i = 0 ; i < 5 ; i++){
                 let ar = data.data[i];
-                let z = ar.images["480w_still"];
-                $("#inner").append(`<td id="`+ i +`"><img src="`+ z.url +`" height="200" width="200"></img></td>
+                console.log(ar);
+                let z = ar.id;
+                $("#inner").append(`<td id="`+ i +`"><img src="https://i.giphy.com/media/`+ z +`/giphy.webp" height="200" width="200">
+                </img></td>
                 `);
             }
             
@@ -197,7 +199,12 @@ async function getRecentPosts() {
 
 async function createPost(event) {
     // event.preventDefault();
-
+    let imgadded = "";
+    if (clickedgif){
+        imgadded = `<figure class="image is-square">
+        <img src="`+ clickedgif +`">
+      </figure>`;
+    }
     let content = $("#userNewPost")[0].value;
     console.log("Running");
     console.log(content);
@@ -209,7 +216,7 @@ async function createPost(event) {
                 data: {
                     "id": postId,
                     "username": _username,
-                    "content": content,
+                    "content": content + imgadded,
                     "replies": [],
                     "hearts": [],
                     "timestamp": new Date()
@@ -219,10 +226,15 @@ async function createPost(event) {
         }
         );
         r.then(response => {
+            clickedgif = "";
             console.log(response);
             $("#userNewPost")[0].value = "";
+            $("#examplegif").empty();
+            $("#inner").empty();
+            $("textarea#text").replaceWith(`<button class="button is-info" id="giphPostButton" type="gif">Use Giphy!</a>`);
             return response;
         }).catch(error => {
+            clickedgif = "";
             console.log(error);
         });
     } else {
