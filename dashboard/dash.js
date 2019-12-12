@@ -9,11 +9,15 @@ const pubRoot = new axios.create({
 });
 
 $(function () {
-    // alert("hello world?");
-    // console.log(document.cookie);
     getRecentPosts();
     getPosts();
-    $("#submitPostButton").on("click", function (event) { createPost(event) });
+
+    // let posts = Promise.resolve(getPosts());
+    // posts.then(function(value) {
+    //     console.log('value: ' + value);
+    //   });
+
+    $("#submitPostButton").on("click", function(event) { createPost(event)});
     $(document).on("click", "#giphPostButton", function (event) {
         console.log("hello");
         searchbox()
@@ -33,6 +37,8 @@ $(function () {
     $(document).on("click", "#submitCreateEvent", function (event) { submitCreateEvent() });
 
     $(document).on("click", "#editProfileModal", function(event) {renderEditProfileModal()});
+    $(document).on("click", "button.is-primary.is-light", function (event) { cancleReply(event) });
+    $(document).on("click", "button.is-warning.is-light", function (event) { createReply(event) });
 });
 
 function addgif(event) {
@@ -41,21 +47,92 @@ function addgif(event) {
     clickedgif = url;
     $("#examplegif").empty();
     $("#examplegif").append(`
-     <h4 class="subtitle">Image you've selected </h4>
-     <figure class="image is-128x128">
-     <img src="`+ url + `">
-   </figure>`);
+    <h4 class="subtitle">Image you've selected </h4>
+    <figure class="image is-128x128">
+    <img src="`+ url + `">
+  </figure>`);
 
 
-    console.log(id);
-    console.log($("#" + id).children().attr('src'));
+   console.log(id);
+   console.log($("#" + id).children().attr('src'));
+}
+
+   
+
+async function cancleReply(event){
+    console.log(event);
+}
+
+async function createReply(event){
+    console.log(event);
+}
+
+async function renderPosts(posts){
+    console.log("Render POSTS");
+    console.log(posts);
+    let keys = Object.keys(posts);
+    $("#dashboard").empty();
+//     const value = getPosts().then(
+//         function(result) {
+//             return result;
+//         },
+//         function(error) {}
+//         );
+//     console.log("//Hello//");
+//    console.log(value);
+//    console.log("//Hello//");
+
+
+  for (let i = 0; i < keys.length ; i++){
+  let key = keys[i];
+  let tweet = `<div class="box">
+    <article class="media">
+        <figure class="media-left">
+            <p class="image is-64x64">
+                <img src="https://bit.ly/2LM5hdj">
+            </p>
+        </figure>
+    </article>
+    <div>
+        <div class="content"></div>
+        <p>
+            <strong>`+ posts[key+""].username+`</strong>
+            <br> `+ 
+            posts[key+""].content
+            +`
+            <br>
+            <small><a id=`+key+`>Heart<br></a><br></small>
+        </p>
+    </div>
+        <div class="media-content">
+            <div class="field">
+                <p class="control">
+                    <textarea class="textarea is-primary" placeholder="Reply...." rows="2"></textarea>
+                </p>
+                <div class="field">
+                    <p class="control">
+                        <button class="button is-primary is-light" id="submit`+ key +`">Submit</button>
+                        <button class="button is-warning is-light" id="cancel`+ key + `">Cancel</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
+</div>`
+$("#dashboard").prepend(tweet);
+
+  }
+    
+    // console.log(getPosts());
+
 }
 
 // USE FOR TESTING PURPOSES ONLY!!! BE VERY CAREFUL!!!
 async function deleteAllPosts() {
     let r = pubRoot.delete(`http://localhost:3000/private`, { headers: { Authorization: z } }).then(
         response => {
-            console.log(response);
+            // console.log(response);
             return response;
         }
     ).catch(error => { console.log(error) });
@@ -349,8 +426,8 @@ async function createPost(event) {
 
 async function getPosts() {
     let r = pubRoot.get('http://localhost:3000/private/posts', { headers: { Authorization: z } }).then(response => {
-        console.log(response);
-        return response;
+        let temp = response.data.result;
+        renderPosts(temp);
     }).catch(error => { console.log(error) });
 };
 
