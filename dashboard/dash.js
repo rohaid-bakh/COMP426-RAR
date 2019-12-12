@@ -364,7 +364,7 @@ async function userInfo() {
 
 // allows user to uodate profile with newInfo object
 async function updateUserProfile(newInfo) {
-    pubRoot.post(`http://localhost:3000/user/users/${_username}`, {data: newInfo}{
+    pubRoot.post(`http://localhost:3000/user/users/${_username}`, {data: newInfo},{
         headers: { Authorization: z }
     }).then(response => {
         console.log(response);
