@@ -11,12 +11,6 @@ const pubRoot = new axios.create({
 $(function () {
     getRecentPosts();
     getPosts();
-
-    // let posts = Promise.resolve(getPosts());
-    // posts.then(function(value) {
-    //     console.log('value: ' + value);
-    //   });
-
     $("#submitPostButton").on("click", function(event) { createPost(event)});
     $(document).on("click", "#giphPostButton", function (event) {
         console.log("hello");
@@ -35,11 +29,116 @@ $(function () {
         cancelEventModal()
     });
     $(document).on("click", "#submitCreateEvent", function (event) { submitCreateEvent() });
-
     $(document).on("click", "#editProfileModal", function(event) {renderEditProfileModal()});
-    $(document).on("click", "button.is-primary.is-light", function (event) { cancleReply(event) });
-    $(document).on("click", "button.is-warning.is-light", function (event) { createReply(event) });
+    $(document).on("click", "button.is-primary.is-light", function (event) {  createReply(event) });
+    $(document).on("click", "button.is-warning.is-light", function (event) { cancleReply(event)});
+    $(document).on("click", "button.is-danger.is-light", function (event) {  deletePosts(event) });
+    $(document).on("click", "button.is-success.is-light", function (event) { editPosts(event)})
+    // $(document).on("click", "button.is-dark", function (event) { handleLikes(event)});
 });
+
+// NEARLY HAD IT BUT LIKE FUNCTIONALITY BUSTED 
+// async function handleLikes(event) {
+//     console.log("test");
+//     let id = event.currentTarget.id;
+//     let num = id.substring(3);
+//     likePost(num);
+//     let currentLikes = $("#chan"+num ).text();
+//     console.log(currentLikes);
+//     let numcurrentLikes =  parseInt(currentLikes) + 1;
+//     console.log(numcurrentLikes);
+//     document.getElementById("chan" + num).value = numcurrentLikes + "";
+// }
+
+async function deletePosts(event){
+    let id = event.currentTarget.id;
+    let num = id.substring(6);
+    deletePost(num);
+    $( "#box" + num ).remove();
+}
+async function editPostSubmit(event) {
+    let id = event.currentTarget.id;
+    let num = id.substring(7);
+    let value = document.getElementById("2textarea"+num).value;
+    let gif = $( "#figure" + num).html();
+    if (gif == undefined){
+        gif = "";
+    } else {
+    gif =  `<figure class="image is-square" id="figure`+ num +`">`
+    +  gif + `</figure>`; }
+    editPost(num, value+gif);
+    $("#2textarea"+num).replaceWith(`<p id="p`+ num +`">
+    <br> `+ 
+    value +  '<br>' + `
+    <br>
+    </p>`);
+    $( "#figure" + num).replaceWith(gif);
+    $( "#2submit" + num ).remove()
+    $("#2cancel" + num).remove()
+
+
+}
+async function editPostCancel(event, post) {
+    let id = event.currentTarget.id;
+    let num = id.substring(7);
+    $("#2textarea"+num).replaceWith(`<p id="p`+ num +`">
+    <br> `+ 
+    post+  '<br>' + `
+    <br>
+    </p>`);
+    $( "#2submit" + num ).remove()
+    $("#2cancel" + num).remove()
+
+}
+async function editPosts(event){
+    let id = event.currentTarget.id;
+    let num = id.substring(4);
+    let post = $("#p"+ num).text();
+    $("#p"+num).replaceWith(`<textarea class="textarea is-primary" placeholder="Reply...." rows="2" id="2textarea`+ num +`">`+
+        post 
+    +`</textarea>
+    <button class="button is-link" id="2submit`+ num +`">Submit</button>
+     <button class="button is-info" id="2cancel`+ num +`">Cancel</button>
+    `)
+    $(document).on("click", "button.is-link", function (event) {  editPostSubmit(event) });
+    $(document).on("click", "button.is-info", function (event) { editPostCancel(event, post)});
+}
+
+async function cancleReply(event){
+    let id = event.currentTarget.id;
+    let num = id.substring(6);
+    document.getElementById("textarea"+ num).value = "";
+}
+
+async function createReply(event){
+    let id = event.currentTarget.id;
+    let num = id.substring(6);
+    let val = document.getElementById("textarea"+ num).value;
+    replyPost(num , val);
+    renderQuickReply(num);
+}
+
+function renderQuickReply(num) {
+    let reply = `<article class="media">
+    <figure class="media-left">
+        <p class="image is-64x64">
+            <img src="https://bit.ly/2LM5hdj">
+        </p>
+    </figure>
+
+    <div class="media-content">
+        <div class="content">
+            <p>
+                <strong>Anon</strong>
+                <br>`+ document.getElementById("textarea"+ num).value +`<br>
+                <small><a>Heart</a>
+            </p>
+        </div>
+    </div>
+</article>`;
+    $("#div" + num).append(reply);
+    document.getElementById("textarea"+ num).value = "";
+}
 
 function addgif(event) {
     let id = event.currentTarget.id;
@@ -59,33 +158,50 @@ function addgif(event) {
 
    
 
-async function cancleReply(event){
-    console.log(event);
-}
-
-async function createReply(event){
-    console.log(event);
-}
-
 async function renderPosts(posts){
+    $("#dashboard").empty();
     console.log("Render POSTS");
     console.log(posts);
     let keys = Object.keys(posts);
-    $("#dashboard").empty();
-//     const value = getPosts().then(
-//         function(result) {
-//             return result;
-//         },
-//         function(error) {}
-//         );
-//     console.log("//Hello//");
-//    console.log(value);
-//    console.log("//Hello//");
-
-
   for (let i = 0; i < keys.length ; i++){
   let key = keys[i];
-  let tweet = `<div class="box">
+  let replyArray = posts[key+""].replies;
+  let rep = "";
+  let author = posts[key+""].username;
+  let editbutton = "";
+  let deletebutton = "";
+//   let likebutton = "";
+//   let likeCount = posts[key + ""].hearts.length;
+  if (author === _username){
+    editbutton = ` <button class="button is-success is-light" id="edit`+ key +`">Edit</button>`;
+    deletebutton = ` <button class="button is-danger is-light" id="delete`+ key +`">Delete</button>`;
+    // button = "";like
+  } else {
+    // likebutton = `<button class="button is-dark" id="but` + key + `">Like</button>`;
+
+  }
+  if (replyArray.length != 0){
+   
+      for (let z = 0 ; z < replyArray.length ; z++ ){
+        rep = rep + `<article class="media">
+        <figure class="media-left">
+            <p class="image is-64x64">
+                <img src="https://bit.ly/2LM5hdj">
+            </p>
+        </figure>
+    
+        <div class="media-content">
+            <div class="content">
+                <p>
+                    <strong>Anon</strong>
+                    <br>`+ replyArray[z] +`<br>
+                </p>
+            </div>
+        </div>
+    </article>`;
+      }
+  }
+  let tweet = `<div class="box" id="box`+ key +`">
     <article class="media">
         <figure class="media-left">
             <p class="image is-64x64">
@@ -95,37 +211,42 @@ async function renderPosts(posts){
     </article>
     <div>
         <div class="content"></div>
-        <p>
-            <strong>`+ posts[key+""].username+`</strong>
+        <h2 class="title" id="h2`+ key + `">`+ author +`</h2>
+        <p id="p`+ key+ `">
             <br> `+ 
             posts[key+""].content
             +`
             <br>
-            <small><a id=`+key+`>Heart<br></a><br></small>
-        </p>
+            </p>
+            `
+            +
+            // `<span id="count`+ key +`"><br>Like Count:<span id="chan` + key + `">` + likeCount + `</span></span>
+            `
+        
     </div>
+    <div id=div`+ key +`>
+    `+ rep +`
+     </div>
         <div class="media-content">
             <div class="field">
                 <p class="control">
-                    <textarea class="textarea is-primary" placeholder="Reply...." rows="2"></textarea>
+                    <textarea class="textarea is-primary" placeholder="Reply...." rows="2" id="textarea`+ key +`"></textarea>
                 </p>
                 <div class="field">
                     <p class="control">
                         <button class="button is-primary is-light" id="submit`+ key +`">Submit</button>
-                        <button class="button is-warning is-light" id="cancel`+ key + `">Cancel</button>
+                        <button class="button is-warning is-light" id="cancel`+ key + `">Cancel</button> `
+                        + editbutton + deletebutton
+                        +`
                     </p>
                 </div>
             </div>
         </div>
-    </article>
+        </article>
 </div>
 </div>`
 $("#dashboard").prepend(tweet);
-
   }
-    
-    // console.log(getPosts());
-
 }
 
 // USE FOR TESTING PURPOSES ONLY!!! BE VERY CAREFUL!!!
@@ -382,16 +503,17 @@ async function deleteProfile() {
 async function createPost(event) {
     // event.preventDefault();
     let imgadded = "";
-    if (clickedgif) {
-        imgadded = `<figure class="image is-square">
-        <img src="`+ clickedgif + `">
-      </figure>`;
-    }
+   
     let content = $("#userNewPost")[0].value;
     console.log("Running");
     console.log(content);
     if (content != "") {
         let postId = getRandomInt();
+        if (clickedgif) {
+            imgadded = `<figure class="image is-square" id="figure`+ postId +`">
+            <img src="`+ clickedgif + `">
+          </figure>`;
+        }
         console.log("CreatingA2");
         let r = pubRoot.post(`http://localhost:3000/private/posts/${postId}`,
             {
