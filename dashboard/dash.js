@@ -117,7 +117,12 @@ async function getRecentPosts() {
 
 async function createPost(event) {
     // event.preventDefault();
-
+    let imgadded = "";
+    if (clickedgif){
+        imgadded = `<figure class="image is-square">
+        <img src="`+ clickedgif +`">
+      </figure>`;
+    }
     let content = $("#userNewPost")[0].value;
     console.log("Running");
     console.log(content);
@@ -129,7 +134,7 @@ async function createPost(event) {
                 data: {
                     "id": postId,
                     "username": _username,
-                    "content": content,
+                    "content": content + imgadded,
                     "replies": [],
                     "hearts": [],
                     "timestamp": new Date()
@@ -139,10 +144,15 @@ async function createPost(event) {
         }
         );
         r.then(response => {
+            clickedgif = "";
             console.log(response);
             $("#userNewPost")[0].value = "";
+            $("#examplegif").empty();
+            $("#inner").empty();
+            $("textarea#text").replaceWith(`<button class="button is-info" id="giphPostButton" type="gif">Use Giphy!</a>`);
             return response;
         }).catch(error => {
+            clickedgif = "";
             console.log(error);
         });
     } else {
