@@ -10,8 +10,8 @@ const pubRoot = new axios.create({
 
 $(function () {
     getRecentPosts();
-    getPosts();
-    $("#submitPostButton").on("click", function(event) { createPost(event)});
+    getPosts();    
+    $("#submitPostButton").on("click", function (event) { createPost(event) });
     $(document).on("click", "#giphPostButton", function (event) {
         console.log("hello");
         searchbox()
@@ -29,12 +29,19 @@ $(function () {
         cancelEventModal()
     });
     $(document).on("click", "#submitCreateEvent", function (event) { submitCreateEvent() });
-    $(document).on("click", "#editProfileModal", function(event) {renderEditProfileModal()});
-    $(document).on("click", "button.is-primary.is-light", function (event) {  createReply(event) });
-    $(document).on("click", "button.is-warning.is-light", function (event) { cancleReply(event)});
-    $(document).on("click", "button.is-danger.is-light", function (event) {  deletePosts(event) });
-    $(document).on("click", "button.is-success.is-light", function (event) { editPosts(event)})
+    $(document).on("click", "button.is-primary.is-light", function (event) { createReply(event) });
+    $(document).on("click", "button.is-warning.is-light", function (event) { cancleReply(event) });
+    $(document).on("click", "button.is-danger.is-light", function (event) { deletePosts(event) });
+    $(document).on("click", "button.is-success.is-light", function (event) { editPosts(event) })
     // $(document).on("click", "button.is-dark", function (event) { handleLikes(event)});
+    $("#logOut").on("click", function (event) { logOut() });
+    $(document).on("click", "#editProfileModal", function (event) { renderEditProfileModal() });
+    $(document).on("click", "#submitProfileChanges", function (event) { submitProfileChanges() });
+    $(document).on("click", "#cancelProfileChanges", function (event) {
+        event.preventDefault();
+        cancelProfileChanges();
+    });
+
 });
 
 // NEARLY HAD IT BUT LIKE FUNCTIONALITY BUSTED 
@@ -50,30 +57,44 @@ $(function () {
 //     document.getElementById("chan" + num).value = numcurrentLikes + "";
 // }
 
-async function deletePosts(event){
+async function logOut() {
+    console.log("Logging out");
+    let cookiesToBeDeleted = $.cookie();
+    for (let temp in cookiesToBeDeleted) {
+        $.removeCookie(temp);
+    }
+    _username = "";
+    _userInfo = undefined;
+    z = "";
+    clickedgif = undefined;
+    window.location.href = "/../index.html";
+};
+
+async function deletePosts(event) {
     let id = event.currentTarget.id;
     let num = id.substring(6);
     deletePost(num);
-    $( "#box" + num ).remove();
+    $("#box" + num).remove();
 }
 async function editPostSubmit(event) {
     let id = event.currentTarget.id;
     let num = id.substring(7);
-    let value = document.getElementById("2textarea"+num).value;
-    let gif = $( "#figure" + num).html();
-    if (gif == undefined){
+    let value = document.getElementById("2textarea" + num).value;
+    let gif = $("#figure" + num).html();
+    if (gif == undefined) {
         gif = "";
     } else {
-    gif =  `<figure class="image is-square" id="figure`+ num +`">`
-    +  gif + `</figure>`; }
-    editPost(num, value+gif);
-    $("#2textarea"+num).replaceWith(`<p id="p`+ num +`">
-    <br> `+ 
-    value +  '<br>' + `
+        gif = `<figure class="image is-square" id="figure` + num + `">`
+            + gif + `</figure>`;
+    }
+    editPost(num, value + gif);
+    $("#2textarea" + num).replaceWith(`<p id="p` + num + `">
+    <br> `+
+        value + '<br>' + `
     <br>
     </p>`);
-    $( "#figure" + num).replaceWith(gif);
-    $( "#2submit" + num ).remove()
+    $("#figure" + num).replaceWith(gif);
+    $("#2submit" + num).remove()
     $("#2cancel" + num).remove()
 
 
@@ -81,40 +102,40 @@ async function editPostSubmit(event) {
 async function editPostCancel(event, post) {
     let id = event.currentTarget.id;
     let num = id.substring(7);
-    $("#2textarea"+num).replaceWith(`<p id="p`+ num +`">
-    <br> `+ 
-    post+  '<br>' + `
+    $("#2textarea" + num).replaceWith(`<p id="p` + num + `">
+    <br> `+
+        post + '<br>' + `
     <br>
     </p>`);
-    $( "#2submit" + num ).remove()
+    $("#2submit" + num).remove()
     $("#2cancel" + num).remove()
 
 }
-async function editPosts(event){
+async function editPosts(event) {
     let id = event.currentTarget.id;
     let num = id.substring(4);
-    let post = $("#p"+ num).text();
-    $("#p"+num).replaceWith(`<textarea class="textarea is-primary" placeholder="Reply...." rows="2" id="2textarea`+ num +`">`+
-        post 
-    +`</textarea>
-    <button class="button is-link" id="2submit`+ num +`">Submit</button>
-     <button class="button is-info" id="2cancel`+ num +`">Cancel</button>
+    let post = $("#p" + num).text();
+    $("#p" + num).replaceWith(`<textarea class="textarea is-primary" placeholder="Reply...." rows="2" id="2textarea` + num + `">` +
+        post
+        + `</textarea>
+    <button class="button is-link" id="2submit`+ num + `">Submit</button>
+     <button class="button is-info" id="2cancel`+ num + `">Cancel</button>
     `)
-    $(document).on("click", "button.is-link", function (event) {  editPostSubmit(event) });
-    $(document).on("click", "button.is-info", function (event) { editPostCancel(event, post)});
+    $(document).on("click", "button.is-link", function (event) { editPostSubmit(event) });
+    $(document).on("click", "button.is-info", function (event) { editPostCancel(event, post) });
 }
 
-async function cancleReply(event){
+async function cancleReply(event) {
     let id = event.currentTarget.id;
     let num = id.substring(6);
-    document.getElementById("textarea"+ num).value = "";
+    document.getElementById("textarea" + num).value = "";
 }
 
-async function createReply(event){
+async function createReply(event) {
     let id = event.currentTarget.id;
     let num = id.substring(6);
-    let val = document.getElementById("textarea"+ num).value;
-    replyPost(num , val);
+    let val = document.getElementById("textarea" + num).value;
+    replyPost(num, val);
     renderQuickReply(num);
 }
 
@@ -130,14 +151,14 @@ function renderQuickReply(num) {
         <div class="content">
             <p>
                 <strong>Anon</strong>
-                <br>`+ document.getElementById("textarea"+ num).value +`<br>
+                <br>`+ document.getElementById("textarea" + num).value + `<br>
                 <small><a>Heart</a>
             </p>
         </div>
     </div>
 </article>`;
     $("#div" + num).append(reply);
-    document.getElementById("textarea"+ num).value = "";
+    document.getElementById("textarea" + num).value = "";
 }
 
 function addgif(event) {
@@ -156,34 +177,34 @@ function addgif(event) {
     console.log($("#" + id).children().attr('src'));
 }
 
-   
 
-async function renderPosts(posts){
+
+async function renderPosts(posts) {
     $("#dashboard").empty();
     console.log("Render POSTS");
     console.log(posts);
     let keys = Object.keys(posts);
-  for (let i = 0; i < keys.length ; i++){
-  let key = keys[i];
-  let replyArray = posts[key+""].replies;
-  let rep = "";
-  let author = posts[key+""].username;
-  let editbutton = "";
-  let deletebutton = "";
-//   let likebutton = "";
-//   let likeCount = posts[key + ""].hearts.length;
-  if (author === _username){
-    editbutton = ` <button class="button is-success is-light" id="edit`+ key +`">Edit</button>`;
-    deletebutton = ` <button class="button is-danger is-light" id="delete`+ key +`">Delete</button>`;
-    // button = "";like
-  } else {
-    // likebutton = `<button class="button is-dark" id="but` + key + `">Like</button>`;
+    for (let i = 0; i < keys.length; i++) {
+        let key = keys[i];
+        let replyArray = posts[key + ""].replies;
+        let rep = "";
+        let author = posts[key + ""].username;
+        let editbutton = "";
+        let deletebutton = "";
+        //   let likebutton = "";
+        //   let likeCount = posts[key + ""].hearts.length;
+        if (author === _username) {
+            editbutton = ` <button class="button is-success is-light" id="edit` + key + `">Edit</button>`;
+            deletebutton = ` <button class="button is-danger is-light" id="delete` + key + `">Delete</button>`;
+            // button = "";like
+        } else {
+            // likebutton = `<button class="button is-dark" id="but` + key + `">Like</button>`;
 
-  }
-  if (replyArray.length != 0){
-   
-      for (let z = 0 ; z < replyArray.length ; z++ ){
-        rep = rep + `<article class="media">
+        }
+        if (replyArray.length != 0) {
+
+            for (let z = 0; z < replyArray.length; z++) {
+                rep = rep + `<article class="media">
         <figure class="media-left">
             <p class="image is-64x64">
                 <img src="https://bit.ly/2LM5hdj">
@@ -194,14 +215,14 @@ async function renderPosts(posts){
             <div class="content">
                 <p>
                     <strong>Anon</strong>
-                    <br>`+ replyArray[z] +`<br>
+                    <br>`+ replyArray[z] + `<br>
                 </p>
             </div>
         </div>
     </article>`;
-      }
-  }
-  let tweet = `<div class="box" id="box`+ key +`">
+            }
+        }
+        let tweet = `<div class="box" id="box` + key + `">
     <article class="media">
         <figure class="media-left">
             <p class="image is-64x64">
@@ -211,11 +232,11 @@ async function renderPosts(posts){
     </article>
     <div>
         <div class="content"></div>
-        <h2 class="title" id="h2`+ key + `">`+ author +`</h2>
-        <p id="p`+ key+ `">
-            <br> `+ 
-            posts[key+""].content
-            +`
+        <h2 class="title" id="h2`+ key + `">` + author + `</h2>
+        <p id="p`+ key + `">
+            <br> `+
+            posts[key + ""].content
+            + `
             <br>
             </p>
             `
@@ -224,20 +245,20 @@ async function renderPosts(posts){
             `
         
     </div>
-    <div id=div`+ key +`>
-    `+ rep +`
+    <div id=div`+ key + `>
+    `+ rep + `
      </div>
         <div class="media-content">
             <div class="field">
                 <p class="control">
-                    <textarea class="textarea is-primary" placeholder="Reply...." rows="2" id="textarea`+ key +`"></textarea>
+                    <textarea class="textarea is-primary" placeholder="Reply...." rows="2" id="textarea`+ key + `"></textarea>
                 </p>
                 <div class="field">
                     <p class="control">
-                        <button class="button is-primary is-light" id="submit`+ key +`">Submit</button>
+                        <button class="button is-primary is-light" id="submit`+ key + `">Submit</button>
                         <button class="button is-warning is-light" id="cancel`+ key + `">Cancel</button> `
-                        + editbutton + deletebutton
-                        +`
+            + editbutton + deletebutton
+            + `
                     </p>
                 </div>
             </div>
@@ -245,8 +266,8 @@ async function renderPosts(posts){
         </article>
 </div>
 </div>`
-$("#dashboard").prepend(tweet);
-  }
+        $("#dashboard").prepend(tweet);
+    }
 }
 
 // USE FOR TESTING PURPOSES ONLY!!! BE VERY CAREFUL!!!
@@ -255,6 +276,17 @@ async function deleteAllPosts() {
         response => {
             // console.log(response);
             return response;
+        }
+    ).catch(error => { console.log(error) });
+}
+
+// USE FOR TESTING PURPOSES ONLY!!! BE VERY CAREFUL!!!
+async function deleteAllUsers() {
+    console.log("deleting users");
+    let r = pubRoot.delete(`http://localhost:3000/user`, { headers: { Authorization: z } }).then(
+        response => {
+            console.log("deleting users almost done...");
+            console.log(response);
         }
     ).catch(error => { console.log(error) });
 }
@@ -377,7 +409,7 @@ function submitCreateEvent() {
 }
 
 function renderEditProfileModal() {
-    let s = `<div class="modal is-active" id = "editProfileModal">
+    let s = `<div class="modal is-active editProfileModal" id = "profileModal">
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">
@@ -385,43 +417,71 @@ function renderEditProfileModal() {
       </header>
       <section class="modal-card-body">
         <div class="field">
-            <label class = "label">Event Name</label>
+            <label class = "label">Your Name</label>
             <div class="control">
-                <input class="input is-success" type="text" id = "eventName">
+                <input class="input is-success" type="text" id = "changeName" value = "${_userInfo.data.yourname}">
             </div>
         </div>
         <div class="field">
-            <label class = "label">Event Host</label>
+            <label class = "label">Your Age</label>
             <div class="control">
-                <input class="input is-success" type="text" id = "eventHost">
+                <input class="input is-success" type="text" id = "changeAge" value = "${_userInfo.data.age}">
             </div>
         </div>
         <div class="field">
-            <label class = "label">Event Time</label>
+            <label class = "label">Your Gender Identity</label>
             <div class="control">
-                <input class="input is-success" type="text" id = "eventTime">
+                <input class="input is-success" type="text" id = "changeGenderIdentity" value = "${_userInfo.data.genderIdentity}">
             </div>
         </div>
         <div class="field">
-            <label class = "label">Event Details</label>
+            <label class = "label">Your Pronouns</label>
             <div class="control">
-                <textarea class="textarea" id = "eventDetails"></textarea>
+                <input class="input is-success" type="text" id = "changePronouns" value = "${_userInfo.data.pronouns}">
             </div>
         </div>
         <div class="field">
-            <label class = "label">Event Image URL</label>
+            <label class = "label">Your Interests (Please enter as comma seperated list)</label>
             <div class="control">
-                <input class="input is-success" type="text" id = "eventImgURL">
+                <textarea class="textarea" id = "changeInterests">${_userInfo.data.interest}</textarea>
+            </div>
+        </div>
+        <div class="field">
+            <label class = "label">Your Description</label>
+            <div class="control">
+                <textarea class="textarea" id = "changeDescription">${_userInfo.data.description}</textarea>
             </div>
         </div>
       </section>
       <footer class="modal-card-foot">
-        <button class="button" type = "submit" id = "submitCreateEvent">Create</button>
-        <button class = "button" type = "submit" id = "cancelEventModal">Cancel</button>
+        <button class="button" type = "submit" id = "submitProfileChanges">Submit Profile Changes</button>
+        <button class = "button" type = "submit" id = "cancelProfileChanges">Cancel Profile Changes</button>
       </footer>
     </div>
   </div>`;
     $("body").append(s);
+}
+
+function submitProfileChanges() {
+    let r = pubRoot.post(`http://localhost:3000/user/${_username}`,
+        {
+            data: {
+                "yourname": $("#changeName")[0].value(),
+                "pronouns": $("#changePronouns")[0].value(),
+                "age": $("#changeAge")[0].value(),
+                "genderIdentity": $("#changeGenderIdentity")[0].value(),
+                "description": $("#changeDescription")[0].value(),
+                "interest": $("#changeInterests")[0].value().split(',')
+            }
+        }, {
+        headers: { Authorization: z },
+    }).then(response => { console.log(response) }).catch(error => { console.log(error) });
+};
+
+
+function cancelProfileChanges() {
+    console.log("trying To Remove");
+    $("#profileModal").remove();
 }
 
 function getToken() {
@@ -449,16 +509,17 @@ async function getRecentPosts() {
 
 // Creates user if user is not already created.
 async function createUser() {
-    pubRoot.get(`http://localhost:3000/user/users/${_username}`, {
+    console.log("Creating user!");
+    pubRoot.get(`http://localhost:3000/user/${_username}`, {
         headers: { Authorization: z }
     }).then(response => {
         console.log(response);
-        console.log("worked");
+        console.log("Recieved user Info");
     }
     ).catch(error => {
         console.log("_userInfo.data = ");
         console.log(_userInfo.data);
-        let r3 = pubRoot.post(`http://localhost:3000/user/users/${_username}`, {
+        let r3 = pubRoot.post(`http://localhost:3000/user/${_username}`, {
             data: {
                 "yourname": _userInfo.data.yourname,
                 "pronouns": _userInfo.data.pronouns,
@@ -467,50 +528,52 @@ async function createUser() {
                 "genderIdentity": _userInfo.data.genderIdentity,
                 "interest": _userInfo.data.interest,
             }
-        },
-            { headers: { Authorization: z } }).then(response => { console.log(response) }).catch(error => { console.log(error) });
+        },{headers: { Authorization: z }}).then(response => { 
+                console.log("Successfully created user");
+                console.log(response);
+            }).catch(error => { console.log(error) });
     });
 };
 
 // Allows user to read info.
 async function userInfo() {
-    pubRoot.get(`http://localhost:3000/user/users/${_username}`, {
+    pubRoot.get(`http://localhost:3000/user/S${_username}`, {
         headers: { Authorization: z }
     }).then(response => {
         console.log(response);
         return response;
     }
-    ).catch(error => {console.log(error)});
+    ).catch(error => { console.log(error) });
 }
 
 // allows user to uodate profile with newInfo object
 async function updateUserProfile(newInfo) {
-    pubRoot.post(`http://localhost:3000/user/users/${_username}`, {data: newInfo},{
+    pubRoot.post(`http://localhost:3000/user/users/${_username}`, { data: newInfo }, {
         headers: { Authorization: z }
     }).then(response => {
         console.log(response);
         return response;
     }
-    ).catch(error => {console.log(error)});  
+    ).catch(error => { console.log(error) });
 }
 
 async function deleteProfile() {
-    pubRoot.delete(`http://localhost:3000/user/users/${_username}`, {headers: {Authorization: z}}).then(
-        response => {alert("Your profile is deleted until you log back in.")}
-    ).catch(error => {alert("Your profile could not be deleted.")});
+    pubRoot.delete(`http://localhost:3000/user/users/${_username}`, { headers: { Authorization: z } }).then(
+        response => { alert("Your profile is deleted until you log back in.") }
+    ).catch(error => { alert("Your profile could not be deleted.") });
 }
 
 async function createPost(event) {
     // event.preventDefault();
     let imgadded = "";
-   
+
     let content = $("#userNewPost")[0].value;
     console.log("Running");
     console.log(content);
     if (content != "") {
         let postId = getRandomInt();
         if (clickedgif) {
-            imgadded = `<figure class="image is-square" id="figure`+ postId +`">
+            imgadded = `<figure class="image is-square" id="figure` + postId + `">
             <img src="`+ clickedgif + `">
           </figure>`;
         }
@@ -536,6 +599,7 @@ async function createPost(event) {
             $("#examplegif").empty();
             $("#inner").empty();
             $("textarea#text").replaceWith(`<button class="button is-info" id="giphPostButton" type="gif">Use Giphy!</a>`);
+            renderPosts(getPosts());
             return response;
         }).catch(error => {
             clickedgif = "";

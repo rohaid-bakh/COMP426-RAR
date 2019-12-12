@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.8.0/css/bulma.css">
     <script src="..\node_modules\axios\dist\axios.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <script  type="module" src="./dash.js"></script>
 </head>
 
@@ -49,7 +50,7 @@
 
             <div class="column">
                 <div class="navbar-brand column">
-                    <a class="navbar-item" href="dash.html" id = "editProfileModal">
+                    <a class="navbar-item" id = "editProfileModal">
                         <p><strong>USER</strong></p>
                     </a>
                 </div>
@@ -66,6 +67,13 @@
                 <div class="navbar-brand column">
                     <a class="navbar-item" href="dash.html">
                         <p><strong>Settings</strong></p>
+                    </a>
+                </div>
+            </div>
+            <div class = "column">
+                <div class = "navbar-brand column">
+                    <a class = "navbar-item" id = "logOut">
+                        <p><strong>Logout</strong></p>
                     </a>
                 </div>
             </div>
