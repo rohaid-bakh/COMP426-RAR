@@ -47,14 +47,14 @@ function addgif(event) {
     clickedgif = url;
     $("#examplegif").empty();
     $("#examplegif").append(`
-    <h4 class="subtitle">Image you've selected </h4>
-    <figure class="image is-128x128">
-    <img src="`+ url + `">
-  </figure>`);
+     <h4 class="subtitle">Image you've selected </h4>
+     <figure class="image is-128x128">
+     <img src="`+ url + `">
+   </figure>`);
 
 
-   console.log(id);
-   console.log($("#" + id).children().attr('src'));
+    console.log(id);
+    console.log($("#" + id).children().attr('src'));
 }
 
    
