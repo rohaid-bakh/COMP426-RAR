@@ -79,10 +79,12 @@ function giphy() {
         xhr.done(function (data) {
             console.log(data.data[0]);
             $("#inner").empty();
-            for (let i = 0 ; i < 8 ; i++){
+            for (let i = 0 ; i < 5 ; i++){
                 let ar = data.data[i];
-                let z = ar.images["480w_still"];
-                $("#inner").append(`<td id="`+ i +`"><img src="`+ z.url +`" height="200" width="200"></img></td>
+                console.log(ar);
+                let z = ar.id;
+                $("#inner").append(`<td id="`+ i +`"><img src="https://i.giphy.com/media/`+ z +`/giphy.webp" height="200" width="200">
+                </img></td>
                 `);
             }
             
