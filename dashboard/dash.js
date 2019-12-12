@@ -1,4 +1,5 @@
 let _username;
+let _userInfo;
 let z;
 let clickedgif;
 
@@ -12,7 +13,7 @@ $(function () {
     // console.log(document.cookie);
     getRecentPosts();
     getPosts();
-    $("#submitPostButton").on("click", function(event) { createPost(event)});
+    $("#submitPostButton").on("click", function (event) { createPost(event) });
     $(document).on("click", "#giphPostButton", function (event) {
         console.log("hello");
         searchbox()
@@ -20,7 +21,7 @@ $(function () {
     $(document).on("keydown", "textarea#text", function (event) {
         setTimeout(giphy(), 4000);
     });
-    $(document).on("click","td", function(event){
+    $(document).on("click", "td", function (event) {
         addgif(event);
     })
 
@@ -30,32 +31,34 @@ $(function () {
         cancelEventModal()
     });
     $(document).on("click", "#submitCreateEvent", function (event) { submitCreateEvent() });
+
+    $(document).on("click", "#editProfileModal", function(event) {renderEditProfileModal()});
 });
 
- function addgif(event){
-     let id  = event.currentTarget.id;
-     let url = $( "#"+ id).children().attr( 'src');
-     clickedgif = url;
-     $("#examplegif").empty();
-     $("#examplegif").append(`
+function addgif(event) {
+    let id = event.currentTarget.id;
+    let url = $("#" + id).children().attr('src');
+    clickedgif = url;
+    $("#examplegif").empty();
+    $("#examplegif").append(`
      <h4 class="subtitle">Image you've selected </h4>
      <figure class="image is-128x128">
-     <img src="`+ url +`">
+     <img src="`+ url + `">
    </figure>`);
-     
 
-     console.log(id);
-     console.log($( "#"+ id).children().attr( 'src'));
- }
+
+    console.log(id);
+    console.log($("#" + id).children().attr('src'));
+}
 
 // USE FOR TESTING PURPOSES ONLY!!! BE VERY CAREFUL!!!
 async function deleteAllPosts() {
-    let r = pubRoot.delete(`http://localhost:3000/private`, {headers: {Authorization: z}}).then(
+    let r = pubRoot.delete(`http://localhost:3000/private`, { headers: { Authorization: z } }).then(
         response => {
             console.log(response);
             return response;
         }
-    ).catch(error => {console.log(error)});
+    ).catch(error => { console.log(error) });
 }
 
 function searchbox() {
@@ -87,19 +90,19 @@ function giphy() {
         xhr.done(function (data) {
             console.log(data.data[0]);
             $("#inner").empty();
-            for (let i = 0 ; i < 5 ; i++){
+            for (let i = 0; i < 5; i++) {
                 let ar = data.data[i];
                 console.log(ar);
                 let z = ar.id;
-                $("#inner").append(`<td id="`+ i +`"><img src="https://i.giphy.com/media/`+ z +`/giphy.webp" height="200" width="200">
+                $("#inner").append(`<td id="` + i + `"><img src="https://i.giphy.com/media/` + z + `/giphy.webp" height="200" width="200">
                 </img></td>
                 `);
             }
-            
+
 
         }, 6000);
 
-     
+
     });
 }
 
@@ -175,6 +178,53 @@ function submitCreateEvent() {
     alert("Event has been created!");
 }
 
+function renderEditProfileModal() {
+    let s = `<div class="modal is-active" id = "editProfileModal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Edit Profile</p>
+      </header>
+      <section class="modal-card-body">
+        <div class="field">
+            <label class = "label">Event Name</label>
+            <div class="control">
+                <input class="input is-success" type="text" id = "eventName">
+            </div>
+        </div>
+        <div class="field">
+            <label class = "label">Event Host</label>
+            <div class="control">
+                <input class="input is-success" type="text" id = "eventHost">
+            </div>
+        </div>
+        <div class="field">
+            <label class = "label">Event Time</label>
+            <div class="control">
+                <input class="input is-success" type="text" id = "eventTime">
+            </div>
+        </div>
+        <div class="field">
+            <label class = "label">Event Details</label>
+            <div class="control">
+                <textarea class="textarea" id = "eventDetails"></textarea>
+            </div>
+        </div>
+        <div class="field">
+            <label class = "label">Event Image URL</label>
+            <div class="control">
+                <input class="input is-success" type="text" id = "eventImgURL">
+            </div>
+        </div>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button" type = "submit" id = "submitCreateEvent">Create</button>
+        <button class = "button" type = "submit" id = "cancelEventModal">Cancel</button>
+      </footer>
+    </div>
+  </div>`;
+    $("body").append(s);
+}
 
 function getToken() {
     return document.cookie;
@@ -189,21 +239,75 @@ async function getRecentPosts() {
             headers: { Authorization: z },
         });
     r.then(response => {
-        console.log(response.data.user);
+        _userInfo = response.data.user;
+        console.log(_userInfo);
         _username = response.data.user.name;
         console.log("Working " + _username);
-        return;
+        createUser();
     }).catch(error => {
         console.log(error);
     });
 };
 
+// Creates user if user is not already created.
+async function createUser() {
+    pubRoot.get(`http://localhost:3000/user/users/${_username}`, {
+        headers: { Authorization: z }
+    }).then(response => {
+        console.log(response);
+        console.log("worked");
+    }
+    ).catch(error => {
+        console.log("_userInfo.data = ");
+        console.log(_userInfo.data);
+        let r3 = pubRoot.post(`http://localhost:3000/user/users/${_username}`, {
+            data: {
+                "yourname": _userInfo.data.yourname,
+                "pronouns": _userInfo.data.pronouns,
+                "age": _userInfo.data.age,
+                "descriptions": _userInfo.data.descriptions,
+                "genderIdentity": _userInfo.data.genderIdentity,
+                "interest": _userInfo.data.interest,
+            }
+        },
+            { headers: { Authorization: z } }).then(response => { console.log(response) }).catch(error => { console.log(error) });
+    });
+};
+
+// Allows user to read info.
+async function userInfo() {
+    pubRoot.get(`http://localhost:3000/user/users/${_username}`, {
+        headers: { Authorization: z }
+    }).then(response => {
+        console.log(response);
+        return response;
+    }
+    ).catch(error => {console.log(error)});
+}
+
+// allows user to uodate profile with newInfo object
+async function updateUserProfile(newInfo) {
+    pubRoot.post(`http://localhost:3000/user/users/${_username}`, {data: newInfo}{
+        headers: { Authorization: z }
+    }).then(response => {
+        console.log(response);
+        return response;
+    }
+    ).catch(error => {console.log(error)});  
+}
+
+async function deleteProfile() {
+    pubRoot.delete(`http://localhost:3000/user/users/${_username}`, {headers: {Authorization: z}}).then(
+        response => {alert("Your profile is deleted until you log back in.")}
+    ).catch(error => {alert("Your profile could not be deleted.")});
+}
+
 async function createPost(event) {
     // event.preventDefault();
     let imgadded = "";
-    if (clickedgif){
+    if (clickedgif) {
         imgadded = `<figure class="image is-square">
-        <img src="`+ clickedgif +`">
+        <img src="`+ clickedgif + `">
       </figure>`;
     }
     let content = $("#userNewPost")[0].value;
@@ -265,27 +369,27 @@ async function unlikePost(postId) {
             console.log(response);
             temp = response.data.result;
             console.log(temp);
-            temp = temp.filter(x => {x != _username})
+            temp = temp.filter(x => { x != _username })
             console.log(temp)
             let m = pubRoot.post(`http://localhost:3000/private/posts/${postId}/hearts`,
-                {data: temp},
-                { headers: { Authorization: z }}
+                { data: temp },
+                { headers: { Authorization: z } }
             ).then(response => { return response }).catch(error => { console.log(error) });
         }).catch(error => { console.log(error) });
 }
 
 async function deletePost(postId) {
-    let r = pubRoot.delete(`http://localhost:3000/private/posts/${postId}`, {headers: {Authorization: z}}).then(
+    let r = pubRoot.delete(`http://localhost:3000/private/posts/${postId}`, { headers: { Authorization: z } }).then(
         response => {
             console.log(response);
             return response;
         }
-    ).catch(error => {console.log(error)});
+    ).catch(error => { console.log(error) });
 }
 
 async function editPost(postId, content) {
     let r = pubRoot.post(`http://localhost:3000/private/posts/${postId}/content`,
-        { data: content}, { headers: { Authorization: z } }).then(response => {
+        { data: content }, { headers: { Authorization: z } }).then(response => {
             console.log(response);
             return response;
         }).catch(error => { console.log(error) });
@@ -293,10 +397,10 @@ async function editPost(postId, content) {
 
 async function replyPost(postId, content) {
     let r = pubRoot.post(`http://localhost:3000/private/posts/${postId}/replies`,
-    { data: [content], type: "merge" }, { headers: { Authorization: z } }).then(response => {
-        console.log(response);
-        return response;
-    }).catch(error => { console.log(error) });
+        { data: [content], type: "merge" }, { headers: { Authorization: z } }).then(response => {
+            console.log(response);
+            return response;
+        }).catch(error => { console.log(error) });
 }
 
 let getRandomInt = function () {
