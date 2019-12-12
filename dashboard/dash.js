@@ -11,6 +11,7 @@ $(function () {
     // alert("hello world?");
     // console.log(document.cookie);
     getRecentPosts();
+    getPosts();
     $("#submitPostButton").on("click", function(event) { createPost(event)});
     $(document).on("click", "#giphPostButton", function (event) {
         console.log("hello");
@@ -244,7 +245,7 @@ async function createPost(event) {
 
 async function getPosts() {
     let r = pubRoot.get('http://localhost:3000/private/posts', { headers: { Authorization: z } }).then(response => {
-        // console.log(response);
+        console.log(response);
         return response;
     }).catch(error => { console.log(error) });
 };
