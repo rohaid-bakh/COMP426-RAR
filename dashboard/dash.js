@@ -42,9 +42,16 @@ function searchbox() {
     </tbody>
     </table>
     `)
-    $("#gifInner").after(` <div id="box">
+    $("#submitBox").after(` <div id="box">
+    <table class="table is-bordered">
+    <tr id="inner" style="width:500px, height:600px" >
+    <td>
     <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAACoCAMAAABt9SM9AAAAA1BMVEVVVVURwN3rAAAAR0lEQVR4nO3BAQEAAACCIP+vbkhAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-    AAAAAAAAAAAAAAAAO8GxYgAAb0jQ/cAAAAASUVORK5CYII=" height="200" width="200" id="imag1"></div>`)
+    AAAAAAAAAAAAAAAAO8GxYgAAb0jQ/cAAAAASUVORK5CYII=" height="200" width="200" id="imag1">
+    </td>
+    </tr>
+    </table>
+    </div>`)
 
 }
 
@@ -58,13 +65,12 @@ function giphy() {
         let current2 = current.replace(/ /g, "+");
         var xhr = $.get("http://api.giphy.com/v1/gifs/search?q=" + current2 + "&api_key=BP3o4MRx8RqyjPaYrQdkgucOFL641y3M&limit=5");
         xhr.done(function (data) {
-            
             console.log(data.data[0]);
-            $("#box").empty()
+            $("#inner").empty()
             for (let i = 0 ; i < 8 ; i++){
                 let ar = data.data[i];
                 let z = ar.images["480w_still"];
-                $("#box").append(`<img src="`+ z.url +`" height="200" width="200" id="imag"></img>
+                $("#inner").append(`<td><img src="`+ z.url +`" height="200" width="200" id="imag"></img></td>
                 `);
             }
             
