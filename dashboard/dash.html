@@ -4,11 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Dashboard</title>
-    <link rel="stylesheet" href="node_modules/bulma/css/bulma.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+    <!-- <link rel="stylesheet" href="node_modules/bulma/css/bulma.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.8.0/css/bulma.css">
     <script src="..\node_modules\axios\dist\axios.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="dash.js"></script>
+    <script  type="module" src="./dash.js"></script>
 </head>
 
 <body>
@@ -83,7 +83,7 @@
     </nav>
 
     <!-- START CONTENT ON PAGE -->
-    <div class="columns">
+    <div class="columns" id = "main">
 
         <!-- <div class="column" style="border-style: solid; border-width: 30px 30px 30px 30px; background-color: rgb(147, 245, 245)"> -->
         <div class="column" style="border: 5px solid black;
@@ -91,6 +91,7 @@
             background: rgb(205, 237, 250);
             background-clip: padding-box;
             border-width: 15px 5px 5px 15px">
+            <button id = "makeEventButton">MAKE EVENT</button>
             <strong>Events near you!</strong><br><br>
             <div style="border: 5px solid black; background: #C1C8E4; border-width: 2px">
                 <strong>Norman Fucking Rockwell concert - Andrew Martin is interested</strong>
