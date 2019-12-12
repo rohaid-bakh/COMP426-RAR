@@ -34,20 +34,21 @@ $(function () {
     $(document).on("click", "button.is-warning.is-light", function (event) { cancleReply(event)});
     $(document).on("click", "button.is-danger.is-light", function (event) {  deletePosts(event) });
     $(document).on("click", "button.is-success.is-light", function (event) { editPosts(event)})
-    $(document).on("click", "button.is-dark", function (event) { handleLikes(event)});
+    // $(document).on("click", "button.is-dark", function (event) { handleLikes(event)});
 });
 
-async function handleLikes(event) {
-    console.log("test");
-    let id = event.currentTarget.id;
-    let num = id.substring(3);
-    likePost(num);
-    let currentLikes = $("#chan"+num ).text();
-    console.log(currentLikes);
-    let numcurrentLikes =  parseInt(currentLikes) + 1;
-    console.log(numcurrentLikes);
-    $("#chan"+num ).replaceWith( `<span id="chan` + num + `">` + numcurrentLikes + `</span>`);
-}
+// NEARLY HAD IT BUT LIKE FUNCTIONALITY BUSTED 
+// async function handleLikes(event) {
+//     console.log("test");
+//     let id = event.currentTarget.id;
+//     let num = id.substring(3);
+//     likePost(num);
+//     let currentLikes = $("#chan"+num ).text();
+//     console.log(currentLikes);
+//     let numcurrentLikes =  parseInt(currentLikes) + 1;
+//     console.log(numcurrentLikes);
+//     document.getElementById("chan" + num).value = numcurrentLikes + "";
+// }
 
 async function deletePosts(event){
     let id = event.currentTarget.id;
@@ -158,11 +159,10 @@ function addgif(event) {
    
 
 async function renderPosts(posts){
+    $("#dashboard").empty();
     console.log("Render POSTS");
     console.log(posts);
     let keys = Object.keys(posts);
-    $("#dashboard").empty();
-
   for (let i = 0; i < keys.length ; i++){
   let key = keys[i];
   let replyArray = posts[key+""].replies;
@@ -170,14 +170,14 @@ async function renderPosts(posts){
   let author = posts[key+""].username;
   let editbutton = "";
   let deletebutton = "";
-  let likebutton = "";
-  let likeCount = posts[key + ""].hearts.length;
+//   let likebutton = "";
+//   let likeCount = posts[key + ""].hearts.length;
   if (author === _username){
     editbutton = ` <button class="button is-success is-light" id="edit`+ key +`">Edit</button>`;
     deletebutton = ` <button class="button is-danger is-light" id="delete`+ key +`">Delete</button>`;
-    likebutton = "";
+    // button = "";like
   } else {
-    likebutton = `<button class="button is-dark" id="but` + key + `">Like</button>`;
+    // likebutton = `<button class="button is-dark" id="but` + key + `">Like</button>`;
 
   }
   if (replyArray.length != 0){
@@ -218,8 +218,10 @@ async function renderPosts(posts){
             +`
             <br>
             </p>
-            `+ likebutton
-            +`<span id="count`+ key +`"><br>Like Count:<span id="chan` + key + `">` + likeCount + `</span></span>
+            `
+            +
+            // `<span id="count`+ key +`"><br>Like Count:<span id="chan` + key + `">` + likeCount + `</span></span>
+            `
         
     </div>
     <div id=div`+ key +`>
