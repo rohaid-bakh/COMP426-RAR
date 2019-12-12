@@ -33,8 +33,21 @@ $(function () {
     $(document).on("click", "button.is-primary.is-light", function (event) {  createReply(event) });
     $(document).on("click", "button.is-warning.is-light", function (event) { cancleReply(event)});
     $(document).on("click", "button.is-danger.is-light", function (event) {  deletePosts(event) });
-    $(document).on("click", "button.is-success.is-light", function (event) { editPosts(event)});
+    $(document).on("click", "button.is-success.is-light", function (event) { editPosts(event)})
+    $(document).on("click", "button.is-dark", function (event) { handleLikes(event)});
 });
+
+async function handleLikes(event) {
+    console.log("test");
+    let id = event.currentTarget.id;
+    let num = id.substring(3);
+    likePost(num);
+    let currentLikes = $("#chan"+num ).text();
+    console.log(currentLikes);
+    let numcurrentLikes =  parseInt(currentLikes) + 1;
+    console.log(numcurrentLikes);
+    $("#chan"+num ).replaceWith( `<span id="chan` + num + `">` + numcurrentLikes + `</span>`);
+}
 
 async function deletePosts(event){
     let id = event.currentTarget.id;
@@ -157,11 +170,18 @@ async function renderPosts(posts){
   let author = posts[key+""].username;
   let editbutton = "";
   let deletebutton = "";
+  let likebutton = "";
+  let likeCount = posts[key + ""].hearts.length;
   if (author === _username){
     editbutton = ` <button class="button is-success is-light" id="edit`+ key +`">Edit</button>`;
     deletebutton = ` <button class="button is-danger is-light" id="delete`+ key +`">Delete</button>`;
+    likebutton = "";
+  } else {
+    likebutton = `<button class="button is-dark" id="but` + key + `">Like</button>`;
+
   }
   if (replyArray.length != 0){
+   
       for (let z = 0 ; z < replyArray.length ; z++ ){
         rep = rep + `<article class="media">
         <figure class="media-left">
@@ -175,7 +195,6 @@ async function renderPosts(posts){
                 <p>
                     <strong>Anon</strong>
                     <br>`+ replyArray[z] +`<br>
-                    <small><a>Heart</a></small>
                 </p>
             </div>
         </div>
@@ -199,8 +218,8 @@ async function renderPosts(posts){
             +`
             <br>
             </p>
-            `+ `<button class="button is-dark">Like</button>`
-            +`
+            `+ likebutton
+            +`<span id="count`+ key +`"><br>Like Count:<span id="chan` + key + `">` + likeCount + `</span></span>
         
     </div>
     <div id=div`+ key +`>
