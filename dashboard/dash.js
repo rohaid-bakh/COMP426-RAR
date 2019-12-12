@@ -11,6 +11,7 @@ const pubRoot = new axios.create({
 $(function () {
     getRecentPosts();
     getPosts();    
+    getEvents();
     $("#submitPostButton").on("click", function (event) { createPost(event) });
     $(document).on("click", "#giphPostButton", function (event) {
         console.log("hello");
@@ -33,7 +34,6 @@ $(function () {
     $(document).on("click", "button.is-warning.is-light", function (event) { cancleReply(event) });
     $(document).on("click", "button.is-danger.is-light", function (event) { deletePosts(event) });
     $(document).on("click", "button.is-success.is-light", function (event) { editPosts(event) })
-    // $(document).on("click", "button.is-dark", function (event) { handleLikes(event)});
     $("#logOut").on("click", function (event) { logOut() });
     $(document).on("click", "#editProfileModal", function (event) { renderEditProfileModal() });
     $(document).on("click", "#submitProfileChanges", function (event) { submitProfileChanges() });
@@ -43,19 +43,6 @@ $(function () {
     });
 
 });
-
-// NEARLY HAD IT BUT LIKE FUNCTIONALITY BUSTED 
-// async function handleLikes(event) {
-//     console.log("test");
-//     let id = event.currentTarget.id;
-//     let num = id.substring(3);
-//     likePost(num);
-//     let currentLikes = $("#chan"+num ).text();
-//     console.log(currentLikes);
-//     let numcurrentLikes =  parseInt(currentLikes) + 1;
-//     console.log(numcurrentLikes);
-//     document.getElementById("chan" + num).value = numcurrentLikes + "";
-// }
 
 async function logOut() {
     console.log("Logging out");
@@ -694,10 +681,33 @@ async function createEvent(name, host, time, details, imageURL) {
         });
     }
 };
-
+async function renderEvents(data) {
+    let z =  Object.keys(data.result);
+    console.log(z);
+    for (let i = 0 ; i < z.length ; i++) {
+        let key = z[i];
+        console.log(key);
+        let current = data.result[key + ""];
+        let content = current.details;
+        let eventid = current.eventId;
+        let host = current.host;
+        let img = current.imageURL;
+        let name = current.name;
+        let time = current.time;
+        let newTile = `
+        <div class="box" id="childbox` + key + `">
+        <p class="title">` + name + `</p>
+        <p>@` + host  + ` ` +  time +`</p>
+        <p>` + content + ` <img src="` + img+ `"></p>  
+      </div>
+      <br><br>`;
+      $("div#events").prepend(newTile);
+    }
+}
 async function getEvents() {
     let r = pubRoot.get('http://localhost:3000/public/events').then(response => {
-        console.log(response);
+        console.log(response.data);
+        renderEvents(response.data);
         return response;
     }).catch(error => { console.log(error) });
 };
