@@ -14,7 +14,6 @@ $(function () {
     getEvents();
     $("#submitPostButton").on("click", function (event) { createPost(event) });
     $(document).on("click", "#giphPostButton", function (event) {
-        console.log("hello");
         searchbox()
     });
     $(document).on("keydown", "textarea#text", function (event) {
@@ -45,7 +44,6 @@ $(function () {
 });
 
 async function logOut() {
-    console.log("Logging out");
     let cookiesToBeDeleted = $.cookie();
     for (let temp in cookiesToBeDeleted) {
         $.removeCookie(temp);
@@ -158,18 +156,12 @@ function addgif(event) {
      <figure class="image is-128x128">
      <img src="`+ url + `">
    </figure>`);
-
-
-    console.log(id);
-    console.log($("#" + id).children().attr('src'));
 }
 
 
 
 async function renderPosts(posts) {
     $("#dashboard").empty();
-    console.log("Render POSTS");
-    console.log(posts);
     let keys = Object.keys(posts);
     for (let i = 0; i < keys.length; i++) {
         let key = keys[i];
@@ -261,7 +253,6 @@ async function renderPosts(posts) {
 async function deleteAllPosts() {
     let r = pubRoot.delete(`http://localhost:3000/private`, { headers: { Authorization: z } }).then(
         response => {
-            // console.log(response);
             return response;
         }
     ).catch(error => { console.log(error) });
@@ -299,17 +290,14 @@ function searchbox() {
 function giphy() {
 
     let current = document.getElementById("text").value;
-    console.log(current);
     let key = "BP3o4MRx8RqyjPaYrQdkgucOFL641y3M";
     setTimeout(function () {
         let current2 = current.replace(/ /g, "+");
         var xhr = $.get("http://api.giphy.com/v1/gifs/search?q=" + current2 + "&api_key=BP3o4MRx8RqyjPaYrQdkgucOFL641y3M&limit=5");
         xhr.done(function (data) {
-            console.log(data.data[0]);
             $("#inner").empty();
             for (let i = 0; i < 5; i++) {
                 let ar = data.data[i];
-                console.log(ar);
                 let z = ar.id;
                 $("#inner").append(`<td id="` + i + `"><img src="https://i.giphy.com/media/` + z + `/giphy.webp" height="200" width="200">
                 </img></td>
@@ -382,13 +370,6 @@ function submitCreateEvent() {
     let time = $("#eventTime")[0].value;
     let details = $("#eventDetails")[0].value;
     let imageURL = $("#eventImgURL")[0].value;
-
-    console.log(name);
-    console.log(host);
-    console.log(time);
-    console.log(details);
-    console.log(imageURL);
-
     createEvent(name, host, time, details, imageURL);
 
     cancelEventModal();
@@ -396,8 +377,6 @@ function submitCreateEvent() {
 }
 
 function renderEditProfileModal() {
-    console.log("Editing profile");
-    console.log(_userInfo);
     let s = `<div class="modal is-active editProfileModal" id = "profileModal">
     <div class="modal-background"></div>
     <div class="modal-card">
@@ -453,7 +432,6 @@ function renderEditProfileModal() {
 
 // allows user to uodate profile with newInfo object
 function submitProfileChanges() {
-    console.log("submittingprofilechanges")
     let r = pubRoot.post(`http://localhost:3000/user/${_username}`,
         {
             data: {
@@ -466,16 +444,12 @@ function submitProfileChanges() {
             }
         }, {
         headers: { Authorization: z },
-    }).then(response => { console.log(response); 
-        _userInfo = {data: response.data.result.posted};
-        console.log("After updating profile _userInfo should be: ");
-        console.log(_userInfo);
-        console.log("profile updated"); cancelProfileChanges();}).catch(error => { console.log(error) });
+    }).then(response => {  
+        _userInfo = {data: response.data.result.posted};}).catch(error => { console.log(error) });
 };
 
 
 function cancelProfileChanges() {
-    console.log("trying To Remove");
     $("#profileModal").remove();
 }
 
@@ -485,7 +459,6 @@ function getToken() {
 
 async function getRecentPosts() {
     z = 'Bearer ' + getToken();
-    console.log("Working " + z);
 
     let r = pubRoot.get('http://localhost:3000/account/status',
         {
@@ -493,9 +466,7 @@ async function getRecentPosts() {
         });
     r.then(response => {
         _userInfo = response.data.user;
-        console.log(_userInfo);
         _username = response.data.user.name;
-        console.log("Working " + _username);
         createUser();
     }).catch(error => {
         console.log(error);
@@ -504,16 +475,9 @@ async function getRecentPosts() {
 
 // Creates user if user is not already created.
 async function createUser() {
-    console.log("Creating user!");
     pubRoot.get(`http://localhost:3000/user/${_username}`, {
         headers: { Authorization: z }
-    }).then(response => {
-        console.log(response);
-        console.log("Recieved user Info");
-    }
-    ).catch(error => {
-        console.log("_userInfo.data = ");
-        console.log(_userInfo.data);
+    }).then().catch(error => {
         let r3 = pubRoot.post(`http://localhost:3000/user/${_username}`, {
             data: {
                 "yourname": _userInfo.data.yourname,
@@ -524,8 +488,6 @@ async function createUser() {
                 "interest": _userInfo.data.interest,
             }
         }, { headers: { Authorization: z } }).then(response => {
-            console.log("Successfully created user");
-            console.log(response);
         }).catch(error => { console.log(error) });
     });
 };
@@ -535,7 +497,6 @@ async function userInfo() {
     pubRoot.get(`http://localhost:3000/user/S${_username}`, {
         headers: { Authorization: z }
     }).then(response => {
-        console.log(response);
         return response;
     }
     ).catch(error => { console.log(error) });
@@ -546,7 +507,6 @@ async function updateUserProfile(newInfo) {
     pubRoot.post(`http://localhost:3000/user/users/${_username}`, { data: newInfo }, {
         headers: { Authorization: z }
     }).then(response => {
-        console.log(response);
         return response;
     }
     ).catch(error => { console.log(error) });
@@ -563,8 +523,6 @@ async function createPost(event) {
     let imgadded = "";
 
     let content = $("#userNewPost")[0].value;
-    console.log("Running");
-    console.log(content);
     if (content != "") {
         let postId = getRandomInt();
         if (clickedgif) {
@@ -572,7 +530,6 @@ async function createPost(event) {
             <img src="`+ clickedgif + `">
           </figure>`;
         }
-        console.log("CreatingA2");
         let r = pubRoot.post(`http://localhost:3000/private/posts/${postId}`,
             {
                 data: {
@@ -589,7 +546,6 @@ async function createPost(event) {
         );
         r.then(response => {
             clickedgif = "";
-            console.log(response);
             $("#userNewPost")[0].value = "";
             $("#examplegif").empty();
             $("#inner").empty();
@@ -615,7 +571,6 @@ async function getPosts() {
 async function likePost(postId) {
     let r = pubRoot.post(`http://localhost:3000/private/posts/${postId}/hearts`,
         { data: [_username], type: "merge" }, { headers: { Authorization: z } }).then(response => {
-            console.log(response);
             return response;
         }).catch(error => { console.log(error) });
 };
@@ -624,11 +579,8 @@ async function unlikePost(postId) {
     let temp;
     let r = pubRoot.get(`http://localhost:3000/private/posts/${postId}/hearts`,
         { headers: { Authorization: z } }).then(response => {
-            console.log(response);
             temp = response.data.result;
-            console.log(temp);
             temp = temp.filter(x => { x != _username })
-            console.log(temp)
             let m = pubRoot.post(`http://localhost:3000/private/posts/${postId}/hearts`,
                 { data: temp },
                 { headers: { Authorization: z } }
@@ -639,7 +591,6 @@ async function unlikePost(postId) {
 async function deletePost(postId) {
     let r = pubRoot.delete(`http://localhost:3000/private/posts/${postId}`, { headers: { Authorization: z } }).then(
         response => {
-            console.log(response);
             return response;
         }
     ).catch(error => { console.log(error) });
@@ -648,7 +599,6 @@ async function deletePost(postId) {
 async function editPost(postId, content) {
     let r = pubRoot.post(`http://localhost:3000/private/posts/${postId}/content`,
         { data: content }, { headers: { Authorization: z } }).then(response => {
-            console.log(response);
             return response;
         }).catch(error => { console.log(error) });
 }
@@ -656,7 +606,6 @@ async function editPost(postId, content) {
 async function replyPost(postId, content) {
     let r = pubRoot.post(`http://localhost:3000/private/posts/${postId}/replies`,
         { data: [content], type: "merge" }, { headers: { Authorization: z } }).then(response => {
-            console.log(response);
             return response;
         }).catch(error => { console.log(error) });
 }
@@ -682,7 +631,6 @@ async function createEvent(name, host, time, details, imageURL) {
                 "imageURL": (imageURL != "") ? imageURL : ""
             }
         }).then(response => {
-            console.log(response);
             return response;
         }).catch(error => {
             console.log(error);
@@ -691,10 +639,8 @@ async function createEvent(name, host, time, details, imageURL) {
 };
 async function renderEvents(data) {
     let z =  Object.keys(data.result);
-    console.log(z);
     for (let i = 0 ; i < z.length ; i++) {
         let key = z[i];
-        console.log(key);
         let current = data.result[key + ""];
         let content = current.details;
         let eventid = current.eventId;
@@ -714,7 +660,6 @@ async function renderEvents(data) {
 }
 async function getEvents() {
     let r = pubRoot.get('http://localhost:3000/public/events').then(response => {
-        console.log(response.data);
         renderEvents(response.data);
         return response;
     }).catch(error => { console.log(error) });
@@ -722,7 +667,6 @@ async function getEvents() {
 
 async function updateName(newName) {
     let r = pubRoot.post(`http://localhost:3000/public/events/${eventId}/name`, { data: newName }).then(response => {
-        console.log(response);
         return response;
     }).catch(error => {
         console.log(error);
@@ -731,7 +675,6 @@ async function updateName(newName) {
 
 async function updateHost(newHost) {
     let r = pubRoot.post(`http://localhost:3000/public/events/${eventId}/host`, { data: newHost }).then(response => {
-        console.log(response);
         return response;
     }).catch(error => {
         console.log(error);
@@ -740,7 +683,6 @@ async function updateHost(newHost) {
 
 async function updateTime(newTime) {
     let r = pubRoot.post(`http://localhost:3000/public/events/${eventId}/time`, { data: newTime }).then(response => {
-        console.log(response);
         return response;
     }).catch(error => {
         console.log(error);
@@ -749,7 +691,6 @@ async function updateTime(newTime) {
 
 async function updateDetails(newDetails) {
     let r = pubRoot.post(`http://localhost:3000/public/events/${eventId}/details`, { data: newDetails }).then(response => {
-        console.log(response);
         return response;
     }).catch(error => {
         console.log(error);
@@ -758,7 +699,6 @@ async function updateDetails(newDetails) {
 
 async function updateImageURL(newImageURL) {
     let r = pubRoot.post(`http://localhost:3000/public/events/${eventId}/imageURL`, { data: newImageURL }).then(response => {
-        console.log(response);
         return response;
     }).catch(error => {
         console.log(error);
@@ -768,7 +708,6 @@ async function updateImageURL(newImageURL) {
 async function deleteEvent(eventId) {
     let r = pubRoot.delete(`http://localhost:3000/private/events/${eventId}`).then(
         response => {
-            console.log(response);
             return response;
         }
     ).catch(error => { console.log(error) });
