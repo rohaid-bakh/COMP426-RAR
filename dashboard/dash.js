@@ -11,12 +11,6 @@ const pubRoot = new axios.create({
 $(function () {
     getRecentPosts();
     getPosts();
-
-    // let posts = Promise.resolve(getPosts());
-    // posts.then(function(value) {
-    //     console.log('value: ' + value);
-    //   });
-
     $("#submitPostButton").on("click", function(event) { createPost(event)});
     $(document).on("click", "#giphPostButton", function (event) {
         console.log("hello");
@@ -37,9 +31,45 @@ $(function () {
     $(document).on("click", "#submitCreateEvent", function (event) { submitCreateEvent() });
 
     $(document).on("click", "#editProfileModal", function(event) {renderEditProfileModal()});
-    $(document).on("click", "button.is-primary.is-light", function (event) { cancleReply(event) });
-    $(document).on("click", "button.is-warning.is-light", function (event) { createReply(event) });
+    $(document).on("click", "button.is-primary.is-light", function (event) {  createReply(event) });
+    $(document).on("click", "button.is-warning.is-light", function (event) { cancleReply(event)});
 });
+
+async function cancleReply(event){
+    let id = event.currentTarget.id;
+    let num = id.substring(6);
+    document.getElementById("textarea"+ num).value = "";
+}
+
+async function createReply(event){
+    let id = event.currentTarget.id;
+    let num = id.substring(6);
+    let val = document.getElementById("textarea"+ num).value;
+    replyPost(num , val);
+    renderQuickReply(num);
+}
+
+function renderQuickReply(num) {
+    let reply = `<article class="media">
+    <figure class="media-left">
+        <p class="image is-64x64">
+            <img src="https://bit.ly/2LM5hdj">
+        </p>
+    </figure>
+
+    <div class="media-content">
+        <div class="content">
+            <p>
+                <strong>Anon</strong>
+                <br>`+ document.getElementById("textarea"+ num).value +`<br>
+                <small><a>Heart</a>
+            </p>
+        </div>
+    </div>
+</article>`;
+    $("#div" + num).append(reply);
+    document.getElementById("textarea"+ num).value = "";
+}
 
 function addgif(event) {
     let id = event.currentTarget.id;
@@ -59,32 +89,44 @@ function addgif(event) {
 
    
 
-async function cancleReply(event){
-    console.log(event);
-}
-
-async function createReply(event){
-    console.log(event);
-}
-
 async function renderPosts(posts){
     console.log("Render POSTS");
     console.log(posts);
     let keys = Object.keys(posts);
     $("#dashboard").empty();
-//     const value = getPosts().then(
-//         function(result) {
-//             return result;
-//         },
-//         function(error) {}
-//         );
-//     console.log("//Hello//");
-//    console.log(value);
-//    console.log("//Hello//");
-
 
   for (let i = 0; i < keys.length ; i++){
   let key = keys[i];
+  let replyArray = posts[key+""].replies;
+  let rep = "";
+  let author = posts[key+""].username;
+  let editbutton = "";
+  let deletebutton = "";
+  if (author === _username){
+    editbutton = ` <button class="button is-primary is-light" id="edit`+ key +`">Edit</button>`;
+    deletebutton = ` <button class="button is-primary is-light" id="delete`+ key +`">Delete</button>`;
+  }
+  if (replyArray.length != 0){
+      for (let z = 0 ; z < replyArray.length ; z++ ){
+        rep = rep + `<article class="media">
+        <figure class="media-left">
+            <p class="image is-64x64">
+                <img src="https://bit.ly/2LM5hdj">
+            </p>
+        </figure>
+    
+        <div class="media-content">
+            <div class="content">
+                <p>
+                    <strong>Anon</strong>
+                    <br>`+ replyArray[z] +`<br>
+                    <small><a>Heart</a></small>
+                </p>
+            </div>
+        </div>
+    </article>`;
+      }
+  }
   let tweet = `<div class="box">
     <article class="media">
         <figure class="media-left">
@@ -96,7 +138,7 @@ async function renderPosts(posts){
     <div>
         <div class="content"></div>
         <p>
-            <strong>`+ posts[key+""].username+`</strong>
+            <strong>`+ author +`</strong>
             <br> `+ 
             posts[key+""].content
             +`
@@ -104,28 +146,29 @@ async function renderPosts(posts){
             <small><a id=`+key+`>Heart<br></a><br></small>
         </p>
     </div>
+    <div id=div`+ key +`>
+    `+ rep +`
+     </div>
         <div class="media-content">
             <div class="field">
                 <p class="control">
-                    <textarea class="textarea is-primary" placeholder="Reply...." rows="2"></textarea>
+                    <textarea class="textarea is-primary" placeholder="Reply...." rows="2" id="textarea`+ key +`"></textarea>
                 </p>
                 <div class="field">
                     <p class="control">
                         <button class="button is-primary is-light" id="submit`+ key +`">Submit</button>
-                        <button class="button is-warning is-light" id="cancel`+ key + `">Cancel</button>
+                        <button class="button is-warning is-light" id="cancel`+ key + `">Cancel</button> `
+                        + editbutton + deletebutton
+                        +`
                     </p>
                 </div>
             </div>
         </div>
-    </article>
+        </article>
 </div>
 </div>`
 $("#dashboard").prepend(tweet);
-
   }
-    
-    // console.log(getPosts());
-
 }
 
 // USE FOR TESTING PURPOSES ONLY!!! BE VERY CAREFUL!!!
@@ -364,7 +407,7 @@ async function userInfo() {
 
 // allows user to uodate profile with newInfo object
 async function updateUserProfile(newInfo) {
-    pubRoot.post(`http://localhost:3000/user/users/${_username}`, {data: newInfo}{
+    pubRoot.post(`http://localhost:3000/user/users/${_username}`, {data: newInfo},{
         headers: { Authorization: z }
     }).then(response => {
         console.log(response);
