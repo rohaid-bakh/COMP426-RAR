@@ -1,8 +1,6 @@
 let _username;
 let z;
 
-var xhr = $.get("http://api.giphy.com/v1/gifs/search?q=ryan+gosling&api_key=YOUR_API_KEY&limit=5");
-xhr.done(function(data) { console.log("success got data", data); });
 
 const pubRoot = new axios.create({
     baseURL: "http://localhost:3000/public"
@@ -14,19 +12,57 @@ $(function () {
     // console.log(document.cookie);
     getRecentPosts();
     $(document).on("click", '#submitPostButton', createPost());
-    $(document).on("keydown", function(event) {
-        giphy();
+    $(document).on("click", "#giphPostButton", function (event) {
+        console.log("hello");
+        searchbox()
     });
-});
+    $(document).on("keydown", "textarea#text", function (event) {
+        setTimeout(giphy(), 4000);
+    });
 
-function giphy(){
-    console.log("1");
-    let current =  document.getElementById("userNewPost").value;
+});
+function searchbox() {
+    $("#giphPostButton").replaceWith("<textarea class='editTweet' rows='4' cols='40' id='text'>" + " " +
+        "</textarea>");
+    $("#text").after(`
+    <table class="table is-bordered" id='giftable'>
+    <tbody id='gifInner'>
+    <tr></tr>
+    <tr></tr>
+    </tbody>
+    </table>
+    `)
+    $("#gifInner").after(` <div id="box">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAACoCAMAAABt9SM9AAAAA1BMVEVVVVURwN3rAAAAR0lEQVR4nO3BAQEAAACCIP+vbkhAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAO8GxYgAAb0jQ/cAAAAASUVORK5CYII=" height="200" width="200" id="imag1"></div>`)
+
+}
+
+
+function giphy() {
+
+    let current = document.getElementById("text").value;
     console.log(current);
     let key = "BP3o4MRx8RqyjPaYrQdkgucOFL641y3M";
-    let current2 = current.replace(/ /g, "+");
-    var xhr =  $.get("http://api.giphy.com/v1/gifs/search?q="+ current2 +"&api_key=BP3o4MRx8RqyjPaYrQdkgucOFL641y3M&limit=5");
-    xhr.done(function(data) { console.log("success got data", data); });
+    setTimeout(function () {
+        let current2 = current.replace(/ /g, "+");
+        var xhr = $.get("http://api.giphy.com/v1/gifs/search?q=" + current2 + "&api_key=BP3o4MRx8RqyjPaYrQdkgucOFL641y3M&limit=5");
+        xhr.done(function (data) {
+            
+            console.log(data.data[0]);
+            $("#box").empty()
+            for (let i = 0 ; i < 8 ; i++){
+                let ar = data.data[i];
+                let z = ar.images["480w_still"];
+                $("#box").append(`<img src="`+ z.url +`" height="200" width="200" id="imag"></img>
+                `);
+            }
+            
+
+        }, 6000);
+
+     
+    });
 }
 
 function getToken() {
@@ -56,19 +92,20 @@ async function createPost() {
     let postId = getRandomInt();
     let r = axios.post('http://localhost:3000/private/posts',
         {
-            data: {[postId]: {
-                "id": postId,
-                "username": _username,
-                "content": content,
-                "replies": [],
-                "hearts": [],
-                "timestamp": new Date()
-              } 
+            data: {
+                [postId]: {
+                    "id": postId,
+                    "username": _username,
+                    "content": content,
+                    "replies": [],
+                    "hearts": [],
+                    "timestamp": new Date()
+                }
             }
         }, {
-            headers: {Authorization: z},
-        }
-        );
+        headers: { Authorization: z },
+    }
+    );
     r.then(response => {
         console.log(response);
         return response;
@@ -78,13 +115,13 @@ async function createPost() {
 }
 
 async function getPosts() {
-    let r = axios.get('http://localhost:3000/private/posts', {headers: {Authorization: z}}).then(response => {
+    let r = axios.get('http://localhost:3000/private/posts', { headers: { Authorization: z } }).then(response => {
         console.log(response);
         return response;
-    }).catch(error => {console.log(error)});
+    }).catch(error => { console.log(error) });
 }
 
 
 let getRandomInt = function () {
     return Math.floor(Math.random() * Math.floor(Number.MAX_SAFE_INTEGER));
-  };
+};
