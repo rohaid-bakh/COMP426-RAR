@@ -445,7 +445,9 @@ function submitProfileChanges() {
         }, {
         headers: { Authorization: z },
     }).then(response => {  
-        _userInfo = {data: response.data.result.posted};}).catch(error => { console.log(error) });
+        _userInfo = {data: response.data.result.posted};
+    cancelProfileChanges();
+}).catch(error => { console.log(error) });
 };
 
 
