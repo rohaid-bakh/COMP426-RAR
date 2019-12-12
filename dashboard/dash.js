@@ -396,6 +396,8 @@ function submitCreateEvent() {
 }
 
 function renderEditProfileModal() {
+    console.log("Editing profile");
+    console.log(_userInfo);
     let s = `<div class="modal is-active editProfileModal" id = "profileModal">
     <div class="modal-background"></div>
     <div class="modal-card">
@@ -449,20 +451,26 @@ function renderEditProfileModal() {
     $("body").append(s);
 }
 
+// allows user to uodate profile with newInfo object
 function submitProfileChanges() {
+    console.log("submittingprofilechanges")
     let r = pubRoot.post(`http://localhost:3000/user/${_username}`,
         {
             data: {
-                "yourname": $("#changeName")[0].value(),
-                "pronouns": $("#changePronouns")[0].value(),
-                "age": $("#changeAge")[0].value(),
-                "genderIdentity": $("#changeGenderIdentity")[0].value(),
-                "description": $("#changeDescription")[0].value(),
-                "interest": $("#changeInterests")[0].value().split(',')
+                "yourname": $("#changeName")[0].value,
+                "pronouns": $("#changePronouns")[0].value,
+                "age": $("#changeAge")[0].value,
+                "genderIdentity": $("#changeGenderIdentity")[0].value,
+                "description": $("#changeDescription")[0].value,
+                "interest": $("#changeInterests")[0].value.split(',')
             }
         }, {
         headers: { Authorization: z },
-    }).then(response => { console.log(response) }).catch(error => { console.log(error) });
+    }).then(response => { console.log(response); 
+        _userInfo = {data: response.data.result.posted};
+        console.log("After updating profile _userInfo should be: ");
+        console.log(_userInfo);
+        console.log("profile updated"); cancelProfileChanges();}).catch(error => { console.log(error) });
 };
 
 
@@ -511,14 +519,14 @@ async function createUser() {
                 "yourname": _userInfo.data.yourname,
                 "pronouns": _userInfo.data.pronouns,
                 "age": _userInfo.data.age,
-                "descriptions": _userInfo.data.descriptions,
+                "description": _userInfo.data.description,
                 "genderIdentity": _userInfo.data.genderIdentity,
                 "interest": _userInfo.data.interest,
             }
-        },{headers: { Authorization: z }}).then(response => { 
-                console.log("Successfully created user");
-                console.log(response);
-            }).catch(error => { console.log(error) });
+        }, { headers: { Authorization: z } }).then(response => {
+            console.log("Successfully created user");
+            console.log(response);
+        }).catch(error => { console.log(error) });
     });
 };
 
