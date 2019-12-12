@@ -19,7 +19,7 @@ $(function () {
     $(document).on("keydown", "textarea#text", function (event) {
         setTimeout(giphy(), 4000);
     });
-
+    editPost("3131663123872237", "Post 438324083420038240932432");
 });
 function searchbox() {
     $("#giphPostButton").replaceWith("<textarea class='editTweet' rows='4' cols='40' id='text'>" + " " +
@@ -88,7 +88,7 @@ async function getRecentPosts() {
 };
 
 async function createPost(event) {
-    event.preventDefault();
+    // event.preventDefault();
 
     let content = $("#userNewPost")[0].value;
     console.log(content);
@@ -161,7 +161,11 @@ async function deletePost(postId) {
 }
 
 async function editPost(postId, content) {
-
+    let r = pubRoot.post(`http://localhost:3000/private/posts/${postId}/content`,
+        { data: content}, { headers: { Authorization: z } }).then(response => {
+            console.log(response);
+            return response;
+        }).catch(error => { console.log(error) });
 }
 
 async function replyPost(postId, content) {
